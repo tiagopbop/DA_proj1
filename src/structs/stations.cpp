@@ -5,12 +5,12 @@
 #include <sstream>
 #include "stations.h"
 using namespace std;
-void HashCities::readLines() {
+void HashStations::readLines() {
     string input = "../src/structs/dataset/airlines.csv";
     ifstream MyReadFile(input);
 
     string line;
-    Cities cities;
+    Stations stations;
 
     getline(MyReadFile, line);
 
@@ -24,7 +24,7 @@ void HashCities::readLines() {
             values.push_back(subtr);
         }
 
-        cities = Cities(values[0], values[1], values[2], values[3], values[4]);
-        this->citiesTable.insert(cities);
+        stations = Stations(values[0], values[1]);
+        this->stationsTable.insert(stations);
     }
 }

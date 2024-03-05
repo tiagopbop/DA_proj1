@@ -8,27 +8,21 @@
 #include <unordered_set>
 #include "Graph.h"
 using namespace std;
-class Cities{
+class Stations{
 private:
-    string city;
     string id;
     string code;
-    string demand;
-    string population;
 public:
-    Cities();
-    Cities(int id);
-    Cities(string city, string id, string code, string demand, string population);
+    Stations();
+    Stations(string id);
+    Stations(string id, string code);
     string getId() const;
-    string getName() const;
     string getCode() const;
-    string getDemand() const;
-    string getPopulation() const;
 };
 
-struct citiesHash{
+struct stationsHash{
 
-    int operator() (const Cities& b) const {
+    int operator() (const Stations& b) const {
         const string& code = b.getCode();
         unsigned  int hash = 5381;
 
@@ -40,16 +34,16 @@ struct citiesHash{
     }
 
 
-    bool operator()(const Cities &b1, const Cities &b2) const {
+    bool operator()(const Stations &b1, const Stations &b2) const {
         return b1.getCode() == b2.getCode();
     }
 };
 
 
-typedef unordered_set<Cities, citiesHash, citiesHash> citiesTable;
-class HashCities{
+typedef unordered_set<Stations, stationsHash, stationsHash> stationsTable;
+class HashStations{
 public:
-    CitiesTable citiesTable;
+    StationsTable stationsTable;
     void readLines();
 };
 
