@@ -13,19 +13,19 @@ using namespace std;
 class Cities{
 private:
     string city;
-    int id;
+    string id;
     string code;
-    float demand;
-    int population;
+    string demand;
+    string population;
 public:
     Cities();
     Cities(int id);
-    Cities(string city, int id, string code, float demand, int population);
-    int getId();
-    string getName();
-    string getCode();
-    float getDemand();
-    int getPopulation();
+    Cities(string city, string id, string code, string demand, string population);
+    string getId() const;
+    string getName() const;
+    string getCode() const;
+    string getDemand() const;
+    string getPopulation() const;
 };
 
 struct citiesHash{
@@ -42,7 +42,7 @@ struct citiesHash{
     }
 
 
-    bool operator()(const Airlines &b1, const Airlines &b2) const {
+    bool operator()(const Cities &b1, const Cities &b2) const {
         return b1.getCode() == b2.getCode();
     }
 };
