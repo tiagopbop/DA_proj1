@@ -19,7 +19,7 @@ private:
     string population;
 public:
     Cities();
-    Cities(int id);
+    Cities(string id);
     Cities(string city, string id, string code, string demand, string population);
     string getId() const;
     string getName() const;
@@ -48,7 +48,7 @@ struct citiesHash{
 };
 
 
-typedef unordered_set<Cities, citiesHash, citiesHash> citiesTable;
+typedef unordered_set<Cities, citiesHash, citiesHash> CitiesTable;
 class HashCities{
 public:
     CitiesTable citiesTable;

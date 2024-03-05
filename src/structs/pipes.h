@@ -19,20 +19,20 @@ public:
     Pipes();
     Pipes(int id);
     Pipes(string id,string ori, string dest, string capacity, string direction);
-    string getId();
-    string getName();
-    string getCode();
-    string getDemand();
-    string getPopulation();
+    string getId() const;
+    string getOri() const;
+    string getDest() const;
+    string getCapacity() const;
+    string getDirection() const;
 };
 
-struct citiesHash{
+struct pipesHash{
 
-    int operator() (const Cities& b) const {
-        const string& code = b.getCode();
+    int operator() (const Pipes& b) const {
+        const string& code = b.getId();
         unsigned  int hash = 5381;
 
-        for(char c: b.getCode()){
+        for(char c: b.getId()){
             hash = 33*hash + static_cast<unsigned int>(c);
         }
 
@@ -41,15 +41,15 @@ struct citiesHash{
 
 
     bool operator()(const Pipes &b1, const Pipes &b2) const {
-        return b1.getCode() == b2.getCode();
+        return b1.getId() == b2.getId();
     }
 };
 
 
-typedef unordered_set<Pipes, pipesHash, pipesHash> pipesTable;
-class HashCities{
+typedef unordered_set<Pipes, pipesHash, pipesHash> PipesTable;
+class HashPipes{
 public:
-    Pipestable pipestable;
+    PipesTable pipestable;
     void readLines();
 };
 

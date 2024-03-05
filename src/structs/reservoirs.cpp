@@ -10,7 +10,7 @@ void HashReservoirs::readLines() {
     ifstream MyReadFile(input);
 
     string line;
-    Cities cities;
+    Reservoirs reservoirs;
 
     getline(MyReadFile, line);
 
@@ -24,7 +24,7 @@ void HashReservoirs::readLines() {
             values.push_back(subtr);
         }
 
-        cities = Cities(values[0], values[1], values[2], values[3], values[4]);
-        this->citiesTable.insert(cities);
+        reservoirs = Reservoirs(values[0], values[1], values[2], values[3], values[4]);
+        this->reservoirsTable.insert(reservoirs);
     }
 }

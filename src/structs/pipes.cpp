@@ -6,7 +6,7 @@
 #include <vector>
 #include "pipes.h"
 using namespace std;
-void HashCities::readLines() {
+void HashPipes::readLines() {
     string input = "../src/structs/dataset/airlines.csv";
     ifstream MyReadFile(input);
 
@@ -21,12 +21,11 @@ void HashCities::readLines() {
         stringstream ss(line);
 
         while (ss.good()) {
-            std::string subtr;
+            string subtr;
             getline(ss, subtr, ',');
             values.push_back(subtr);
         }
-
-        pipes = Pipes(to_string(count),values[0], values[1], values[2], values[3], values[4]);
-        this->pipesTable.insert(pipes);
+        pipes = Pipes(to_string(count),values[0], values[1], values[2], values[3]);
+        this->pipestable.insert(pipes);
     }
 }
