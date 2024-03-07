@@ -1,7 +1,7 @@
 //
 // Created by loading on 05-03-2024.
 //
-
+/*
 void HashCities::readLines() {
     string input = "../src/structs/dataset/airlines.csv";
     ifstream MyReadFile(input);
@@ -25,3 +25,4 @@ void HashCities::readLines() {
         this->airlinesTable.insert(airlines);
     }
 }
+ */

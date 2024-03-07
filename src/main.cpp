@@ -1,3 +1,11 @@
-//
-// Created by loading on 05-03-2024.
-//
+#include <iostream>
+#include "menu.h"
+
+using namespace std;
+
+int main() {
+
+    Menu::Terminal();
+
+    return 0;
+}
