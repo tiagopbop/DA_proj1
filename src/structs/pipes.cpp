@@ -43,7 +43,7 @@ Pipes::Pipes(int id){
     this->capacity = 100;
     this->direction = true;
 }
-Pipes::Pipes(int id,string ori, string dest, int capacity, bool direction){
+Pipes::Pipes(int id,string ori, string dest, int capacity, int direction){
     this->id = id;
     this->ori = ori;
     this->dest = dest;

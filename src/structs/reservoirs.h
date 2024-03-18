@@ -26,17 +26,9 @@ public:
     int getMaxDel() const;
 };
 
-struct reservoirsHash{
-
-    int operator() (const Reservoirs& b) const {
-        const string& code = b.getCode();
-        unsigned  int hash = 5381;
-
-        for(char c: b.getCode()){
-            hash = 33*hash + static_cast<unsigned int>(c);
-        }
-
-        return hash % 449;
+struct ReservoirsHash {
+    size_t operator()(const Reservoirs& reservoir) const {
+        return hash<int>()(reservoir.getId());
     }
 
 
@@ -46,7 +38,8 @@ struct reservoirsHash{
 };
 
 
-typedef unordered_set<Reservoirs, reservoirsHash, reservoirsHash> ReservoirsTable;
+typedef unordered_set<Reservoirs, ReservoirsHash,ReservoirsHash> ReservoirsTable;
+
 class HashReservoirs{
 public:
     ReservoirsTable reservoirsTable;

@@ -20,17 +20,9 @@ public:
     string getCode() const;
 };
 
-struct stationsHash{
-
-    int operator() (const Stations& b) const {
-        const string& code = b.getCode();
-        unsigned  int hash = 5381;
-
-        for(char c: b.getCode()){
-            hash = 33*hash + static_cast<unsigned int>(c);
-        }
-
-        return hash % 449;
+struct StationsHash {
+    size_t operator()(const Stations& station) const {
+        return hash<int>()(station.getId());
     }
 
 
@@ -39,13 +31,14 @@ struct stationsHash{
     }
 };
 
-/*
-typedef unordered_set<Stations, stationsHash, stationsHash> StationsTable;
+
+typedef unordered_set<Stations, StationsHash,
+>StationsTable;
 class HashStations{
 public:
-    StationsTable StationsTable;
+    StationsTable stationsTable;
     void readLines();
 };
- */
+
 
 #endif //DA_PROJECT1_STATIONS_H

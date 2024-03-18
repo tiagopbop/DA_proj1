@@ -28,17 +28,9 @@ public:
     string getPopulation() const;
 };
 
-struct citiesHash{
-
-    int operator() (const Cities& b) const {
-        const string& code = b.getCode();
-        unsigned  int hash = 5381;
-
-        for(char c: b.getCode()){
-            hash = 33*hash + static_cast<unsigned int>(c);
-        }
-
-        return hash % 449;
+struct CitiesHash {
+    size_t operator()(const Cities& city) const {
+        return hash<int>()(city.getId());
     }
 
 
@@ -48,7 +40,8 @@ struct citiesHash{
 };
 
 
-typedef unordered_set<Cities, citiesHash, citiesHash> CitiesTable;
+typedef unordered_set<Cities, CitiesHash,CitiesHash> CitiesTable;
+
 class HashCities{
 public:
     CitiesTable citiesTable;

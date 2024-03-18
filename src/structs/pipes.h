@@ -18,24 +18,17 @@ private:
 public:
     Pipes();
     Pipes(int id);
-    Pipes(int id,string ori, string dest, int capacity, bool direction);
+    Pipes(int id,string ori, string dest, int capacity, int direction);
     int getId() const {return id;}
     string getOri() const {return ori;}
     string getDest() const {return dest;}
     int getCapacity() const {return capacity;}
-    bool getDirection() const {return direction;}
+    int getDirection() const {return direction;}
 };
-/*
-struct pipesHash{
 
-    int operator() (const Pipes& b) const {
-        unsigned  int hash = 5381;
-
-        for(char c : b.getId()){
-            hash = 33*hash + static_cast<unsigned int>(c);
-        }
-
-        return hash % 449;
+struct PipesHash {
+    size_t operator()(const Pipes& pipe) const {
+        return hash<int>()(pipe.getId());
     }
 
 
@@ -44,8 +37,9 @@ struct pipesHash{
     }
 };
 
-*/
-typedef unordered_set<Pipes, pipesHash> PipesTable;
+
+typedef unordered_set<Pipes, PipesHash,PipesHash> PipesTable;
+
 class HashPipes{
 public:
     PipesTable pipestable;
