@@ -35,30 +35,44 @@ void HashCities::readLines() {
     }
 }
 
-    Cities::Cities(string city, string id, string code, string demand, string population)
+    Cities::Cities() {
+        this->city = "Portugal";
+        this->id = 0;
+        this->code = "C_0";
+        this->demand = 0.0;
+        this->population = "0";
+    }
+    Cities::Cities(int id) {
+        this->city = "Portugal";
+        this->id = id;
+        this->code = "C_0";
+        this->demand = 0.0;
+        this->population = "0";
+    }
+    Cities::Cities(string city, int id, string code, float demand, string population)
     {
         this->city = city;
         this->id = id;
-        this->code=code;
-        this->demand=demand;
-        this->population=population;
+        this->code = code;
+        this->demand = demand;
+        this->population = population;
     }
-    string Cities:: getId() const
+    int Cities::getId() const
     {
         return this->id;
     }
-    string Cities:: getName() const
+    string Cities::getName() const
     {
         return this->city;
     }
-    string Cities:: getCode() const
+    string Cities::getCode() const
     {
         return this->code;
     }
-    string Cities::getDemand() const
+    float Cities::getDemand() const
     {
         return this->demand;
     }
-    string Cities:: getPopulation() const{
+    string Cities::getPopulation() const{
         return this->population;
 }

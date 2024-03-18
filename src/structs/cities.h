@@ -13,18 +13,18 @@ using namespace std;
 class Cities{
 private:
     string city;
-    string id;
+    int id;
     string code;
-    string demand;
+    float demand;
     string population;
 public:
     Cities();
-    Cities(string id);
-    Cities(string city, string id, string code, string demand, string population);
-    string getId() const;
+    Cities(int id);
+    Cities(string city, int id, string code, float demand, string population);
+    int getId() const;
     string getName() const;
     string getCode() const;
-    string getDemand() const;
+    float getDemand() const;
     string getPopulation() const;
 };
 

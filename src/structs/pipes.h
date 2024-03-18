@@ -25,14 +25,13 @@ public:
     int getCapacity() const {return capacity;}
     bool getDirection() const {return direction;}
 };
-
+/*
 struct pipesHash{
 
     int operator() (const Pipes& b) const {
-        const string& code = b.getId();
         unsigned  int hash = 5381;
 
-        for(char c: b.getId()){
+        for(char c : b.getId()){
             hash = 33*hash + static_cast<unsigned int>(c);
         }
 
@@ -45,8 +44,8 @@ struct pipesHash{
     }
 };
 
-
-typedef unordered_set<Pipes, pipesHash, pipesHash> PipesTable;
+*/
+typedef unordered_set<Pipes, pipesHash> PipesTable;
 class HashPipes{
 public:
     PipesTable pipestable;

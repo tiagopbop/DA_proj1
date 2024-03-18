@@ -39,12 +39,13 @@ struct stationsHash{
     }
 };
 
-
+/*
 typedef unordered_set<Stations, stationsHash, stationsHash> StationsTable;
 class HashStations{
 public:
-    stationsTable StationsTable;
+    StationsTable StationsTable;
     void readLines();
 };
+ */
 
 #endif //DA_PROJECT1_STATIONS_H
