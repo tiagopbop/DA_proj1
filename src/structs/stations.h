@@ -10,13 +10,13 @@
 using namespace std;
 class Stations{
 private:
-    string id;
+    int id;
     string code;
 public:
     Stations();
-    Stations(string id);
-    Stations(string id, string code);
-    string getId() const;
+    Stations(int id);
+    Stations(int id, string code);
+    int getId() const;
     string getCode() const;
 };
 
@@ -43,7 +43,7 @@ struct stationsHash{
 typedef unordered_set<Stations, stationsHash, stationsHash> StationsTable;
 class HashStations{
 public:
-    StationsTable stationsTable;
+    stationsTable StationsTable;
     void readLines();
 };
 

@@ -25,3 +25,26 @@ void HashStations::readLines() {
         this->stationsTable.insert(stations);
     }
 }
+
+int Stations::getId() const {
+    return this->id;
+}
+
+string Stations::getCode() const {
+    return this->code;
+}
+
+Stations::Stations() {
+    this->id = 0;
+    this->code = "PS_0";
+}
+
+Stations::Stations(int id) {
+    this->id = id;
+    this->code = "PS_0";
+}
+
+Stations::Stations(int id, string code) {
+    this->id = id;
+    this->code = code;
+}

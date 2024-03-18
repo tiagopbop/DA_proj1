@@ -12,18 +12,18 @@ class Reservoirs{
 private:
     string name;
     string municipality;
-    string id;
+    int id;
     string code;
-    string max_del;
+    int max_del;
 public:
     Reservoirs();
-    Reservoirs(string id);
-    Reservoirs(string name, string municipality, string code, string demand, string population);
+    Reservoirs(int id);
+    Reservoirs(string name, string municipality, int id, string code, int max_del);
     string getName() const;
     string getMunicipality() const;
-    string getId() const;
+    int getId() const;
     string getCode() const;
-    string getMaxDel() const;
+    int getMaxDel() const;
 };
 
 struct reservoirsHash{

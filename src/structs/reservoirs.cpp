@@ -32,3 +32,47 @@ void HashReservoirs::readLines() {
         this->reservoirsTable.insert(reservoirs);
     }
 }
+
+Reservoirs::Reservoirs() {
+    this->name = "Portugal";
+    this->municipality = "Portugal";
+    this->id = 0;
+    this->code = "R_0";
+    this->max_del = 0;
+}
+
+Reservoirs::Reservoirs(int id) {
+    this->name = "Portugal";
+    this->municipality = "Portugal";
+    this->id = id;
+    this->code = "R_0";
+    this->max_del = 0;
+}
+
+Reservoirs::Reservoirs(string name, string municipality, int id, string code, int max_del) {
+    this->name = name;
+    this->municipality = municipality;
+    this->id = id;
+    this->code = code;
+    this->max_del = max_del;
+}
+
+string Reservoirs::getName() const {
+    return this->name;
+}
+
+string Reservoirs::getMunicipality() const {
+    return this->municipality;
+}
+
+int Reservoirs::getId() const {
+    return this->id;
+}
+
+string Reservoirs::getCode() const {
+    return this->code;
+}
+
+int Reservoirs::getMaxDel() const {
+    return this->max_del;
+}
