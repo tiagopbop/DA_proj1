@@ -10,20 +10,20 @@
 using namespace std;
 class Pipes{
 private:
-    string id;
+    int id;
     string ori;
     string dest;
-    string capacity;
-    string direction;
+    int capacity;
+    bool direction;
 public:
     Pipes();
     Pipes(int id);
-    Pipes(string id,string ori, string dest, string capacity, string direction);
-    string getId() const;
-    string getOri() const;
-    string getDest() const;
-    string getCapacity() const;
-    string getDirection() const;
+    Pipes(int id,string ori, string dest, int capacity, bool direction);
+    int getId() const {return id;}
+    string getOri() const {return ori;}
+    string getDest() const {return dest;}
+    int getCapacity() const {return capacity;}
+    bool getDirection() const {return direction;}
 };
 
 struct pipesHash{
