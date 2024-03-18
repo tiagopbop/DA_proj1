@@ -15,16 +15,13 @@ void HashStations::readLines() {
     getline(MyReadFile, line);
 
     while (std::getline(MyReadFile, line)) {
-        vector<std::string> values;
         stringstream ss(line);
+        string id;
+        string code;
+        getline(ss, id, ',');
+        getline(ss, code, ',');
 
-        while (ss.good()) {
-            std::string subtr;
-            getline(ss, subtr, ',');
-            values.push_back(subtr);
-        }
-
-        stations = Stations(values[0], values[1]);
+        stations = Stations(stoi(id), code);
         this->stationsTable.insert(stations);
     }
 }

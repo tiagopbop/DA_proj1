@@ -6,7 +6,7 @@
 #define DA_PROJECT1_PIPES_H
 
 #include <unordered_set>
-
+#include <string>
 using namespace std;
 class Pipes{
 private:

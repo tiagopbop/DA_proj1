@@ -11,21 +11,21 @@ void HashPipes::readLines() {
     ifstream MyReadFile(input);
 
     string line;
-    Pipes pipes;
 
     getline(MyReadFile, line);
     int count = -1;
     while (std::getline(MyReadFile, line)) {
         count++;
-        vector<std::string> values;
         stringstream ss(line);
-
-        while (ss.good()) {
-            string subtr;
-            getline(ss, subtr, ',');
-            values.push_back(subtr);
-        }
-        pipes = Pipes(to_string(count),values[0], values[1], values[2], values[3]);
+        string sa;
+        string sb;
+        string cap;
+        string dir;
+        getline(ss, sa, ',');
+        getline(ss, sb, ',');
+        getline(ss, cap, ',');
+        getline(ss, dir, ',');
+        Pipes pipes = Pipes(count,sa,sb,stoi(cap),stoi(dir));
         this->pipestable.insert(pipes);
     }
 }

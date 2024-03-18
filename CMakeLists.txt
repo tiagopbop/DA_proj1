@@ -17,4 +17,7 @@ add_executable(DA_Project1
         src/structs/data_structures/UFDS.cpp
         src/structs/data_structures/MutablePriorityQueue.h
         src/menu.cpp
-        src/menu.h)
+        src/menu.h
+        src/menu.cpp
+        src/menu.cpp
+        src/menu.cpp)

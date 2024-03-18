@@ -15,16 +15,20 @@ void HashReservoirs::readLines() {
     getline(MyReadFile, line);
 
     while (std::getline(MyReadFile, line)) {
-        vector<std::string> values;
         stringstream ss(line);
+        string reser;
+        string municipality;
+        string id;
+        string code;
+        string max_del;
+        getline(ss, reser, ',');
+        getline(ss, municipality, ',');
+        getline(ss, id, ',');
+        getline(ss, code, ',');
+        getline(ss, max_del, ',');
 
-        while (ss.good()) {
-            std::string subtr;
-            getline(ss, subtr, ',');
-            values.push_back(subtr);
-        }
 
-        reservoirs = Reservoirs(values[0], values[1], values[2], values[3], values[4]);
+        reservoirs = Reservoirs(reser, municipality, stoi(id), code, stoi(max_del));
         this->reservoirsTable.insert(reservoirs);
     }
 }

@@ -10,21 +10,55 @@ void HashCities::readLines() {
     ifstream MyReadFile(input);
 
     string line;
-    Cities cities;
 
     getline(MyReadFile, line);
 
+    string city;
+    string id;
+    string code;
+    string demand;
+    string population;
+
     while (std::getline(MyReadFile, line)) {
-        vector<std::string> values;
         stringstream ss(line);
 
-        while (ss.good()) {
-            std::string subtr;
-            getline(ss, subtr, ',');
-            values.push_back(subtr);
-        }
 
-        cities = Cities(values[0], values[1], values[2], values[3], values[4]);
+        getline(ss, city, ',');
+        getline(ss, id, ',');
+        getline(ss, code, ',');
+        getline(ss, demand, ',');
+        getline(ss, population, ',');
+
+
+        Cities cities = Cities(city, stoi(id),code,stof(demand),population);
         this->citiesTable.insert(cities);
     }
+}
+
+    Cities::Cities(string city, string id, string code, string demand, string population)
+    {
+        this->city = city;
+        this->id = id;
+        this->code=code;
+        this->demand=demand;
+        this->population=population;
+    }
+    string Cities:: getId() const
+    {
+        return this->id;
+    }
+    string Cities:: getName() const
+    {
+        return this->city;
+    }
+    string Cities:: getCode() const
+    {
+        return this->code;
+    }
+    string Cities::getDemand() const
+    {
+        return this->demand;
+    }
+    string Cities:: getPopulation() const{
+        return this->population;
 }
