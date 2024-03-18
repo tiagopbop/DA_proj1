@@ -31,20 +31,20 @@ void HashPipes::readLines() {
 }
 Pipes::Pipes(){
     this->id = 0;
-    this->ori = R_1;
-    this->dest = PS_1;
+    this->ori = "R_1";
+    this->dest = "PS_1";
     this->capacity = 100;
     this->direction = true;
 }
 Pipes::Pipes(int id){
     this->id = id;
-    this->ori = R_1;
-    this->dest = PS_1;
+    this->ori = "R_1";
+    this->dest = "PS_1";
     this->capacity = 100;
     this->direction = true;
 }
 Pipes::Pipes(int id,string ori, string dest, int capacity, bool direction){
-    this->id = int;
+    this->id = id;
     this->ori = ori;
     this->dest = dest;
     this->capacity = capacity;
