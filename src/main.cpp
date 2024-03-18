@@ -9,6 +9,17 @@ using namespace std;
 //
 
 int main() {
+    HashCities hashCities;
+    hashCities.readLines();
+
+    HashPipes hashPipes;
+    hashPipes.readLines();
+
+    HashReservoirs hashReservoirs;
+    hashReservoirs.readLines();
+
+    HashStations hashStations;
+    hashStations.readLines();
 
     Menu::Terminal();
 

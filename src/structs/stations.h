@@ -32,8 +32,7 @@ struct StationsHash {
 };
 
 
-typedef unordered_set<Stations, StationsHash,
->StationsTable;
+typedef unordered_set<Stations, StationsHash, StationsHash>StationsTable;
 class HashStations{
 public:
     StationsTable stationsTable;
