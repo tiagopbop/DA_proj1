@@ -4,9 +4,11 @@
 #include <fstream>
 #include <sstream>
 #include "stations.h"
+#include <string>
+#include <iostream>
 using namespace std;
 void HashStations::readLines() {
-    string input = "../src/structs/dataset/airlines.csv";
+    string input = "../data/Stations_Madeira.csv";
     ifstream MyReadFile(input);
 
     string line;
@@ -20,11 +22,12 @@ void HashStations::readLines() {
         string code;
         getline(ss, id, ',');
         getline(ss, code, ',');
-
-        stations = Stations(stoi(id), code);
+        int a = stoi(id);
+        stations = Stations(a, code);
         this->stationsTable.insert(stations);
     }
 }
+
 
 int Stations::getId() const {
     return this->id;
@@ -32,6 +35,10 @@ int Stations::getId() const {
 
 string Stations::getCode() const {
     return this->code;
+}
+
+void Stations::setCode(string code) {
+    this->code = code;
 }
 
 Stations::Stations() {

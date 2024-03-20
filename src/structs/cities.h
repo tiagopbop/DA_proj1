@@ -26,12 +26,21 @@ public:
     string getCode() const;
     float getDemand() const;
     string getPopulation() const;
+    void setCode(string code);
 };
 
 struct CitiesHash {
-    size_t operator()(const Cities& city) const {
-        return hash<int>()(city.getId());
+    int operator() (const Cities& b) const {
+        const string& code = b.getCode();
+        unsigned  int hash = 5381;
+
+        for(char c: b.getCode()){
+            hash = 33*hash + static_cast<unsigned int>(c);
+        }
+
+        return hash % 3019;
     }
+
 
 
     bool operator()(const Cities &b1, const Cities &b2) const {
@@ -46,7 +55,21 @@ class HashCities{
 public:
     CitiesTable citiesTable;
     void readLines();
-};
+
+
+    const Cities* findCity(const string& code) const {
+        Cities dummyStation; // Create a dummy Stations object with the given code
+        dummyStation.setCode(code);
+
+        auto it = citiesTable.find(dummyStation);
+        if (it != citiesTable.end()) {
+            return &(*it); // Return a pointer to the found object
+        } else {
+            return nullptr; // Object not found
+        }
+    }};
+
+
 
 
 #endif //DA_PROJECT1_CITIES_H

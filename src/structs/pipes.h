@@ -7,44 +7,18 @@
 
 #include <unordered_set>
 #include <string>
+#include "Graph.h"
+#include "reservoirs.h"
+#include "cities.h"
+#include "stations.h"
+
 using namespace std;
 class Pipes{
-private:
-    int id;
-    string ori;
-    string dest;
-    int capacity;
-    bool direction;
 public:
-    Pipes();
-    Pipes(int id);
-    Pipes(int id,string ori, string dest, int capacity, int direction);
-    int getId() const {return id;}
-    string getOri() const {return ori;}
-    string getDest() const {return dest;}
-    int getCapacity() const {return capacity;}
-    int getDirection() const {return direction;}
+    Graph<string> pipes;
+    void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations);
 };
 
-struct PipesHash {
-    size_t operator()(const Pipes& pipe) const {
-        return hash<int>()(pipe.getId());
-    }
-
-
-    bool operator()(const Pipes &b1, const Pipes &b2) const {
-        return b1.getId() == b2.getId();
-    }
-};
-
-
-typedef unordered_set<Pipes, PipesHash,PipesHash> PipesTable;
-
-class HashPipes{
-public:
-    PipesTable pipestable;
-    void readLines();
-};
 
 
 

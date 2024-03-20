@@ -12,8 +12,6 @@ int main() {
     HashCities hashCities;
     hashCities.readLines();
 
-    HashPipes hashPipes;
-    hashPipes.readLines();
 
     HashReservoirs hashReservoirs;
     hashReservoirs.readLines();
@@ -21,7 +19,15 @@ int main() {
     HashStations hashStations;
     hashStations.readLines();
 
-    Menu::Terminal();
+    Pipes pipes;
+    pipes.ReadLines(hashReservoirs,hashCities,hashStations);
+
+    const Reservoirs* c = hashReservoirs.findReservoir("R_2");
+    if (c) {
+        std::cout << "Station found: " << c->getCode() << std::endl;
+    } else {
+        std::cout << "Station not found" << std::endl;
+    }    Menu::Terminal();
 
     return 0;
 }

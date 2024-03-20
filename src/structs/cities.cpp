@@ -3,10 +3,12 @@
 //
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <iostream>
 #include "cities.h"
 using namespace std;
 void HashCities::readLines() {
-    string input = "../src/structs/dataset/airlines.csv";
+    string input = "../data/Cities_Madeira.csv";
     ifstream MyReadFile(input);
 
     string line;
@@ -29,8 +31,9 @@ void HashCities::readLines() {
         getline(ss, demand, ',');
         getline(ss, population, ',');
 
-
-        Cities cities = Cities(city, stoi(id),code,stof(demand),population);
+        int a = stoi(id);
+        float b = stof(demand);
+        Cities cities = Cities(city, a,code,b,population);
         this->citiesTable.insert(cities);
     }
 }
@@ -69,6 +72,9 @@ void HashCities::readLines() {
     {
         return this->code;
     }
+    void Cities::setCode(std::string code) {
+        this->code = code;
+}
     float Cities::getDemand() const
     {
         return this->demand;

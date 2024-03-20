@@ -24,11 +24,19 @@ public:
     int getId() const;
     string getCode() const;
     int getMaxDel() const;
+    void setCode(string code);
 };
 
 struct ReservoirsHash {
-    size_t operator()(const Reservoirs& reservoir) const {
-        return hash<int>()(reservoir.getId());
+    int operator() (const Reservoirs& b) const {
+        const string& code = b.getCode();
+        unsigned  int hash = 5381;
+
+        for(char c: b.getCode()){
+            hash = 33*hash + static_cast<unsigned int>(c);
+        }
+
+        return hash % 3019;
     }
 
 
@@ -44,6 +52,18 @@ class HashReservoirs{
 public:
     ReservoirsTable reservoirsTable;
     void readLines();
-};
+
+    const Reservoirs* findReservoir(const string& code) const {
+        Reservoirs dummyStation; // Create a dummy Stations object with the given code
+        dummyStation.setCode(code);
+
+        auto it = reservoirsTable.find(dummyStation);
+        if (it != reservoirsTable.end()) {
+            return &(*it); // Return a pointer to the found object
+        } else {
+            return nullptr; // Object not found
+        }
+    }};
+
 
 #endif //DA_PROJECT1_RESERVOIRS_H

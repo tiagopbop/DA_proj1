@@ -4,9 +4,11 @@
 #include <fstream>
 #include <sstream>
 #include "reservoirs.h"
+#include <string>
+#include <iostream>
 using namespace std;
 void HashReservoirs::readLines() {
-    string input = "../src/structs/dataset/airlines.csv";
+    string input = "../data/Reservoirs_Madeira.csv";
     ifstream MyReadFile(input);
 
     string line;
@@ -27,8 +29,9 @@ void HashReservoirs::readLines() {
         getline(ss, code, ',');
         getline(ss, max_del, ',');
 
-
-        reservoirs = Reservoirs(reser, municipality, stoi(id), code, stoi(max_del));
+        int a = stoi(id);
+        double b = stod(max_del);
+        reservoirs = Reservoirs(reser, municipality, a, code, b);
         this->reservoirsTable.insert(reservoirs);
     }
 }
@@ -72,7 +75,9 @@ int Reservoirs::getId() const {
 string Reservoirs::getCode() const {
     return this->code;
 }
-
+void Reservoirs::setCode(std::string code) {
+    this->code=code;
+}
 int Reservoirs::getMaxDel() const {
     return this->max_del;
 }

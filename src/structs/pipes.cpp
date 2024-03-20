@@ -6,16 +6,14 @@
 #include <vector>
 #include "pipes.h"
 using namespace std;
-void HashPipes::readLines() {
+void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations) {
     string input = "../src/structs/dataset/airlines.csv";
     ifstream MyReadFile(input);
 
     string line;
 
     getline(MyReadFile, line);
-    int count = -1;
     while (std::getline(MyReadFile, line)) {
-        count++;
         stringstream ss(line);
         string sa;
         string sb;
@@ -25,28 +23,17 @@ void HashPipes::readLines() {
         getline(ss, sb, ',');
         getline(ss, cap, ',');
         getline(ss, dir, ',');
-        Pipes pipes = Pipes(count,sa,sb,stoi(cap),stoi(dir));
-        this->pipestable.insert(pipes);
+
+        if(stoi(dir)==1)
+        {
+            pipes.addEdge(sa,sb,stod(cap));
+        }
+        else
+        {
+            pipes.addBidirectionalEdge(sa,sb,stod(cap));
+        }
     }
-}
-Pipes::Pipes(){
-    this->id = 0;
-    this->ori = "R_1";
-    this->dest = "PS_1";
-    this->capacity = 100;
-    this->direction = true;
-}
-Pipes::Pipes(int id){
-    this->id = id;
-    this->ori = "R_1";
-    this->dest = "PS_1";
-    this->capacity = 100;
-    this->direction = true;
-}
-Pipes::Pipes(int id,string ori, string dest, int capacity, int direction){
-    this->id = id;
-    this->ori = ori;
-    this->dest = dest;
-    this->capacity = capacity;
-    this->direction = direction;
-}
+
+
+
+    }
