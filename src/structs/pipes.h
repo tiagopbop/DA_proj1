@@ -17,6 +17,10 @@ class Pipes{
 public:
     Graph<string> pipes;
     void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations);
+
+    string maxFlow(bool specific, string city);
+    void edmondsKarp(string source, string target);
+
 };
 
 

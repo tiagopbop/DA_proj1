@@ -27,7 +27,16 @@ int main() {
         std::cout << "Station found: " << c->getCode() << std::endl;
     } else {
         std::cout << "Station not found" << std::endl;
-    }    Menu::Terminal();
+    }
+
+
+    for(auto a: hashCities.citiesTable)
+        cout<<a.getName()<<endl;
+
+
+    
+    Menu::Terminal();
+
 
     return 0;
 }
