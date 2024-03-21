@@ -82,3 +82,4 @@ void HashCities::readLines() {
     string Cities::getPopulation() const{
         return this->population;
 }
+
