@@ -23,8 +23,12 @@ public:
 
     string maxFlow(bool specific, string city);
     void edmondsKarp(string source, string target);
+    void augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f);
+    double findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t);
+    bool findAugmentingPath( Vertex<string> *s, Vertex<string> *t);
+    void testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vertex<string> *w, double residual);
 
-};
+    };
 
 
 

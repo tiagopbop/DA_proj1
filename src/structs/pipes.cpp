@@ -33,14 +33,8 @@ void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashS
         }
     }
     }
-/*
+
 string Pipes::maxFlow(bool specific, string city) {
-
-
-
-
-
-
 
 }
 
@@ -49,7 +43,7 @@ string Pipes::maxFlow(bool specific, string city) {
 
 
 // Function to test the given vertex 'w' and visit it if conditions are met
-void Pipes:: testAndVisit(std::queue< Vertex<T>*> &q, Edge<T> *e, Vertex<T> *w, double residual) {
+void Pipes:: testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vertex<string> *w, double residual) {
 // Check if the vertex 'w' is not visited and there is residual capacity
     if (! w->isVisited() && residual > 0) {
 // Mark 'w' as visited, set the path through which it was reached, and enqueue it
@@ -63,14 +57,14 @@ void Pipes:: testAndVisit(std::queue< Vertex<T>*> &q, Edge<T> *e, Vertex<T> *w, 
 
 
 // Function to find an augmenting path using Breadth-First Search
-bool Pipes:: findAugmentingPath( Vertex<T> *s, Vertex<T> *t) {
+bool Pipes:: findAugmentingPath( Vertex<string> *s, Vertex<string> *t) {
 // Mark all vertices as not visited
     for(auto v : pipes.getVertexSet()) {
         v->setVisited(false);
     }
 // Mark the source vertex as visited and enqueue it
     s->setVisited(true);
-    std::queue<Vertex<T> *> q;
+    std::queue<Vertex<string> *> q;
     q.push(s);
 // BFS to find an augmenting path
     while( ! q.empty() && ! t->isVisited()) {
@@ -93,8 +87,9 @@ bool Pipes:: findAugmentingPath( Vertex<T> *s, Vertex<T> *t) {
 
 
 // Function to find the minimum residual capacity along the augmenting path
-double Pipes:: findMinResidualAlongPath(Vertex<T> *s, Vertex<T> *t) {
+double Pipes:: findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t) {
     double f = INF;
+
 // Traverse the augmenting path to find the minimum residual capacity
     for (auto v = t; v != s; ) {
         auto e = v->getPath();
@@ -113,7 +108,7 @@ double Pipes:: findMinResidualAlongPath(Vertex<T> *s, Vertex<T> *t) {
 
 
 // Function to augment flow along the augmenting path with the given flow value
-void Pipes:: augmentFlowAlongPath(Vertex<T> *s, Vertex<T> *t, double f) {
+void Pipes::augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f) {
 // Traverse the augmenting path and update the flow values accordingly
     for (auto v = t; v != s; ) {
         auto e = v->getPath();
@@ -132,7 +127,9 @@ void Pipes:: augmentFlowAlongPath(Vertex<T> *s, Vertex<T> *t, double f) {
 // Main function implementing the Edmonds-Karp algorithm
 
 void Pipes:: edmondsKarp(string source, string target) {
-
+    cout<<"starting edmonds: "<<endl;
+    Vertex<string>* s = pipes.findVertex(source);
+    Vertex<string>* t = pipes.findVertex(target);
 // Initialize flow on all edges to 0
     for (auto v : pipes.getVertexSet()) {
         for (auto e: v->getAdj()) {
@@ -140,8 +137,8 @@ void Pipes:: edmondsKarp(string source, string target) {
         }
     }
 // While there is an augmenting path, augment the flow along the path
-    while( findAugmentingPath(g, s, t) ) {
+    while( findAugmentingPath(s, t) ) {
         double f = findMinResidualAlongPath(s, t);
         augmentFlowAlongPath(s, t, f);
     }
-}*/
+}
