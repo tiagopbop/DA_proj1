@@ -7,7 +7,10 @@
 #include <string>
 #include <unordered_set>
 #include "Graph.h"
+#include "pipes.h"
+
 using namespace std;
+class Pipes;
 class Stations{
 private:
     int id;
@@ -44,7 +47,7 @@ typedef unordered_set<Stations, StationsHash, StationsHash>StationsTable;
 class HashStations{
 public:
     StationsTable stationsTable;
-    void readLines();
+    void readLines(Pipes &pipes);
 
 
     const Stations* findStation(const string& code) const {

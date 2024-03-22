@@ -7,24 +7,23 @@
 #include "pipes.h"
 using namespace std;
 void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations) {
-    string input = "../src/structs/dataset/airlines.csv";
+    string input = "../data/Pipes_Madeira.csv";
     ifstream MyReadFile(input);
 
     string line;
-
+    string sa;
+    string sb;
+    string cap;
+    string dir;
     getline(MyReadFile, line);
     while (std::getline(MyReadFile, line)) {
         stringstream ss(line);
-        string sa;
-        string sb;
-        string cap;
-        string dir;
         getline(ss, sa, ',');
         getline(ss, sb, ',');
         getline(ss, cap, ',');
-        getline(ss, dir, ',');
+        getline(ss, dir, '\r');
 
-        if(stoi(dir)==1)
+        if(dir == "1")
         {
             pipes.addEdge(sa,sb,stod(cap));
         }
@@ -33,11 +32,8 @@ void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashS
             pipes.addBidirectionalEdge(sa,sb,stod(cap));
         }
     }
-
-
-
     }
-
+/*
 string Pipes::maxFlow(bool specific, string city) {
 
 
@@ -148,4 +144,4 @@ void Pipes:: edmondsKarp(string source, string target) {
         double f = findMinResidualAlongPath(s, t);
         augmentFlowAlongPath(s, t, f);
     }
-}
+}*/

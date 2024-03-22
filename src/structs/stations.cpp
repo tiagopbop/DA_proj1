@@ -4,10 +4,11 @@
 #include <fstream>
 #include <sstream>
 #include "stations.h"
+#include "pipes.h"
 #include <string>
 #include <iostream>
 using namespace std;
-void HashStations::readLines() {
+void HashStations::readLines(Pipes &pipes) {
     string input = "../data/Stations_Madeira.csv";
     ifstream MyReadFile(input);
 
@@ -24,6 +25,7 @@ void HashStations::readLines() {
         getline(ss, code, ',');
         int a = stoi(id);
         stations = Stations(a, code);
+        pipes.pipes.addVertex(code);
         this->stationsTable.insert(stations);
     }
 }

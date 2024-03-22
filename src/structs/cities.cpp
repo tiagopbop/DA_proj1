@@ -6,8 +6,10 @@
 #include <string>
 #include <iostream>
 #include "cities.h"
+#include "pipes.h"
+
 using namespace std;
-void HashCities::readLines() {
+void HashCities::readLines(Pipes &pipes) {
     string input = "../data/Cities_Madeira.csv";
     ifstream MyReadFile(input);
 
@@ -15,16 +17,16 @@ void HashCities::readLines() {
 
     getline(MyReadFile, line);
 
-    string city;
-    string id;
-    string code;
-    string demand;
-    string population;
+
 
     while (std::getline(MyReadFile, line)) {
         stringstream ss(line);
 
-
+        string city;
+        string id;
+        string code;
+        string demand;
+        string population;
         getline(ss, city, ',');
         getline(ss, id, ',');
         getline(ss, code, ',');
@@ -34,6 +36,7 @@ void HashCities::readLines() {
         int a = stoi(id);
         float b = stof(demand);
         Cities cities = Cities(city, a,code,b,population);
+        pipes.pipes.addVertex(code);
         this->citiesTable.insert(cities);
     }
 }

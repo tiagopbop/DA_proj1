@@ -9,30 +9,33 @@ using namespace std;
 //
 
 int main() {
+    Pipes pipes;
+
     HashCities hashCities;
-    hashCities.readLines();
+    hashCities.readLines(pipes);
 
 
     HashReservoirs hashReservoirs;
-    hashReservoirs.readLines();
+    hashReservoirs.readLines(pipes);
 
     HashStations hashStations;
-    hashStations.readLines();
+    hashStations.readLines(pipes);
 
-    Pipes pipes;
     pipes.ReadLines(hashReservoirs,hashCities,hashStations);
 
-    const Reservoirs* c = hashReservoirs.findReservoir("R_2");
+   /* const Reservoirs* c = hashReservoirs.findReservoir("R_2");
     if (c) {
         std::cout << "Station found: " << c->getCode() << std::endl;
     } else {
         std::cout << "Station not found" << std::endl;
-    }
+    }*/
 
 
-    for(auto a: hashCities.citiesTable)
-        cout<<a.getName()<<endl;
+  //  for(auto a: hashCities.citiesTable)
+    //    cout<<a.getName()<<endl;
 
+    for(auto a: pipes.pipes.getVertexSet())
+        cout<<a->getInfo() << endl;
 
     
     Menu::Terminal();

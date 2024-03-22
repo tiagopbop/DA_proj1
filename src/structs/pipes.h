@@ -13,6 +13,9 @@
 #include "stations.h"
 
 using namespace std;
+class HashStations;
+class HashCities;
+class HashReservoirs;
 class Pipes{
 public:
     Graph<string> pipes;

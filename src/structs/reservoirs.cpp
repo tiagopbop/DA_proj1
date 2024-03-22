@@ -4,10 +4,11 @@
 #include <fstream>
 #include <sstream>
 #include "reservoirs.h"
+#include "pipes.h"
 #include <string>
 #include <iostream>
 using namespace std;
-void HashReservoirs::readLines() {
+void HashReservoirs::readLines(Pipes &pipes) {
     string input = "../data/Reservoirs_Madeira.csv";
     ifstream MyReadFile(input);
 
@@ -32,6 +33,7 @@ void HashReservoirs::readLines() {
         int a = stoi(id);
         double b = stod(max_del);
         reservoirs = Reservoirs(reser, municipality, a, code, b);
+        pipes.pipes.addVertex(code);
         this->reservoirsTable.insert(reservoirs);
     }
 }
