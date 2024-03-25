@@ -32,28 +32,117 @@ int main() {
         std::cout << "Station not found" << std::endl;
     }*/
 
-
     pipes.pipes.addVertex("super_source");
     pipes.pipes.addVertex("super_sink");
 
     Vertex<string>* super_source = pipes.pipes.findVertex("super_source");
     Vertex<string>* super_sink = pipes.pipes.findVertex("super_sink");
 
-    for(auto a : hashReservoirs.reservoirsTable){
-        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
-        pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+    int choise;
+    cout<<"1- Maximum amount of water that can reach each city"<<endl;
+    cout<<"2- Maximum amount of water that can reach a city of your choice"<<endl;
+    cin>>choise;
+    switch (choise) {
+        case 1:{
+            int choise_1;
+            cout<<"1- With overflow"<<endl;
+            cout<<"2- Without overflow"<<endl;
+            cin>>choise_1;
+            switch (choise_1) {
+                case 1:{
+                    for(auto a : hashReservoirs.reservoirsTable){
+                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                        pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+                    }
+
+                    for(auto a : hashCities.citiesTable){
+                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                        pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), INT_MAX);
+                    }
+                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                    double max_flow = 0;
+                    for(auto a : hashCities.citiesTable){
+                        double res = 0;
+                        Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
+                        for(auto b : check_flow->getIncoming()){
+                            res = res + b->getFlow();
+                        }
+                        max_flow = max_flow + res;
+                        cout<<a.getName()<<", "<<a.getCode()<<", "<<res<<endl;
+                    }
+                    cout<<"Max Flow = "<<max_flow<<endl;
+                    break;
+                }
+                case 2:{
+                    for(auto a : hashReservoirs.reservoirsTable){
+                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                        pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+                    }
+
+                    for(auto a : hashCities.citiesTable){
+                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                        pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), a.getDemand());
+                    }
+                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                    double max_flow = 0;
+                    for(auto a : hashCities.citiesTable){
+                        double res = 0;
+                        Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
+                        for(auto b : check_flow->getIncoming()){
+                            res = res + b->getFlow();
+                        }
+                        max_flow = max_flow + res;
+                        cout<<a.getName()<<", "<<a.getCode()<<", "<<res<<endl;
+                    }
+                    cout<<"Max Flow = "<<max_flow<<endl;
+                    break;
+                }
+                default:{
+                    break;
+                }
+            }
+            break;
+        }
+        case 2:{
+            string code;
+            cout<<"Write the code of the desired city"<<endl;
+            cin>>code;
+            string city_name;
+            string city_code;
+            double res = 0;
+            for(auto a : hashReservoirs.reservoirsTable){
+                Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+            }
+            for(auto a : hashCities.citiesTable){
+                if(a.getCode() == code){
+                    city_name = a.getName();
+                    city_code = a.getCode();
+                    Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                    pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), INT_MAX);
+                }
+            }
+            pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+            for(auto a : hashCities.citiesTable){
+                if(a.getCode() == code){
+                    Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
+                    for(auto b: check_flow->getIncoming()){
+                        res = res + b->getFlow();
+                    }
+                }
+            }
+            cout<<city_name<<", "<<city_code<<", "<<res<<endl;
+        }
+        default:{
+            break;
+        }
+        break;
     }
 
-    for(auto a : hashCities.citiesTable){
-        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
-        pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), a.getDemand());
-    }
-
-    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
 
     //pipes.edmondsKarp("R_1","C_10");
 
-    std::stringstream ss;
+    /*std::stringstream ss;
     cout<<"Starting graphread"<<endl;
     for(auto v : pipes.pipes.getVertexSet()) {
         ss << v->getInfo() << "-> (";
@@ -62,22 +151,9 @@ int main() {
         ss << ") || ";
     }
 
-    std::cout << ss.str() << std::endl << std::endl;
+    std::cout << ss.str() << std::endl << std::endl;*/
 
-    double max_flow = 0;
-    for(auto a : hashCities.citiesTable){
-        double res = 0;
-        Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
-        for(auto b : check_flow->getIncoming()){
-            res = res + b->getFlow();
-        }
-        max_flow = max_flow + res;
-        cout<<"Cidade: "<<a.getCode()<<", flow = "<<res<<endl;
-    }
-    cout<<"Max flow = "<<max_flow;
-
-
-    Menu::Terminal();
+    //Menu::Terminal();
 
 
     return 0;

@@ -127,7 +127,6 @@ void Pipes::augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f)
 // Main function implementing the Edmonds-Karp algorithm
 
 void Pipes:: edmondsKarp(string source, string target) {
-    cout<<"starting edmonds: "<<endl;
     Vertex<string>* s = pipes.findVertex(source);
     Vertex<string>* t = pipes.findVertex(target);
 // Initialize flow on all edges to 0
