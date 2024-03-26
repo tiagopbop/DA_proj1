@@ -5,6 +5,8 @@
 #include "menu.h"
 #include <fstream>
 #include <sstream>
+#include <limits.h>
+#include <cmath>
 using namespace std;
 //
 // Created by loading on 05-03-2024.
@@ -42,6 +44,9 @@ int main() {
     cout<<"1- Maximum amount of water that can reach each city"<<endl;
     cout<<"2- Maximum amount of water that can reach a city of your choice"<<endl;
     cin>>choise;
+
+    vector<string> not_full;
+
     switch (choise) {
         case 1:{
             int choise_1;
@@ -69,9 +74,9 @@ int main() {
                         }
                         max_flow = max_flow + res;
                         cout<<a.getName()<<", "<<a.getCode()<<", "<<res<<endl;
+
                     }
-                    cout<<"Max Flow = "<<max_flow<<endl;
-                    break;
+
                 }
                 case 2:{
                     for(auto a : hashReservoirs.reservoirsTable){
@@ -93,9 +98,28 @@ int main() {
                         }
                         max_flow = max_flow + res;
                         cout<<a.getName()<<", "<<a.getCode()<<", "<<res<<endl;
+
+                        const Cities* d = hashCities.findCity(a.getCode());
+                        if(res<d->getDemand())
+                        {
+                            not_full.push_back(a.getName());
+                            not_full.push_back(a.getCode());
+                            double missing = (d->getDemand()) - res;
+                            not_full.push_back(to_string(missing));
+                        }
+
                     }
                     cout<<"Max Flow = "<<max_flow<<endl;
+                    cout << "Do you want to check if there are cities where the flow isn't enough? (Y/N)" << endl<< "Decision:";
+                    string decision;
+                    cin >> decision;
+                    if(decision=="Y")
+                    {
+                        for (size_t i = 0; i < not_full.size() - 2; i += 3) {
+                            cout << not_full[i] << ", " << not_full[i + 1] << ", " << stoi(not_full[i + 2]) << endl;
+                        }                    }
                     break;
+
                 }
                 default:{
                     break;
