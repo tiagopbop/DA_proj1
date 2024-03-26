@@ -43,6 +43,8 @@ int main() {
     int choise;
     cout<<"1- Maximum amount of water that can reach each city"<<endl;
     cout<<"2- Maximum amount of water that can reach a city of your choice"<<endl;
+    cout<<"3- Média de flow dos canos"<<endl;
+    cout<<"4- Diferença entre capacidade e flow de cada cano"<<endl;
     cin>>choise;
 
     vector<string> not_full;
@@ -157,6 +159,44 @@ int main() {
             }
             cout<<city_name<<", "<<city_code<<", "<<res<<endl;
         }
+        /*
+        case 3:{
+            int som = 0;
+            int tot = 0;
+
+            for (auto e : Vetor de pipes resultante do edmond karp ) {
+                som += e->getFlow();
+                tot++;
+            }
+
+            double res = som / tot;
+
+            cout << endl << "A média é " << res << endl;
+        }
+        case 4:{
+            int flo;
+            int cap;
+            int res;
+
+            int max = 0;
+
+            for (auto e : Vetor de pipes resultante do edmond karp ) {
+                flo = e->getFlow();
+                cap = e->getCapacidade();
+
+                res = cap - flo;
+
+                if (res > max) {
+                    max = res;
+                }
+
+                cout << endl << "O cano " << e->getCode() << " tem uma diferença de " << res;
+            }
+            cout << endl;
+
+            cout << endl << "Diferença máxima é de " << max << endl;
+        }
+        */
         default:{
             break;
         }

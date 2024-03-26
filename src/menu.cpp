@@ -12,7 +12,7 @@ int Menu::Terminal() {
 
     cout << "\033[1;36m[ 1 ]\033[0m" << " Basic Service Metrics" << endl;
     cout << "\033[1;36m[ 2 ]\033[0m" << " Reliability and Sensitivity to Failures" << endl;
-    cout << "\033[1;33m[ 9 ]\033[0m" << " Read and Parse the Input Data" << endl;
+    cout << "\033[1;33m[ 9 ] Read and Parse the Input Data\033[0m" << endl;
     cout << "\033[1;31m[ 0 ] Quit\033[0m" << endl;
     cout << endl;
 
@@ -168,7 +168,7 @@ int Menu::Terminal() {
 
             cout << "\033[1;36m[ 1 ]\033[0m" << " Basic Service Metrics" << endl;
             cout << "\033[1;36m[ 2 ]\033[0m" << " Reliability and Sensitivity to Failures" << endl;
-            cout << "\033[1;33m[ 9 ]\033[0m" << " Read and Parse the Input Data" << endl;
+            cout << "\033[1;33m[ 9 ] Read and Parse the Input Data\033[0m" << endl;
             cout << "\033[1;31m[ 0 ] Quit\033[0m" << endl;
             cout << endl;
 
