@@ -1,9 +1,36 @@
 #include <iostream>
+#include <climits>
 #include "menu.h"
+#include "structs/pipes.h"
+#include "structs/cities.h"
+#include "structs/reservoirs.h"
+#include "structs/stations.h"
 
 using namespace std;
 
 int Menu::Terminal() {
+
+    Pipes pipes;
+
+    HashCities hashCities;
+    hashCities.readLines(pipes);
+
+
+    HashReservoirs hashReservoirs;
+    hashReservoirs.readLines(pipes);
+
+    HashStations hashStations;
+    hashStations.readLines(pipes);
+
+    pipes.ReadLines(hashReservoirs,hashCities,hashStations);
+
+    pipes.pipes.addVertex("super_source");
+    pipes.pipes.addVertex("super_sink");
+
+    Vertex<string>* super_source = pipes.pipes.findVertex("super_source");
+    Vertex<string>* super_sink = pipes.pipes.findVertex("super_sink");
+
+    vector<string> not_full;
 
     cout << endl;
     cout << "\033[1;34mWelcome to the Water Supply Management Analysis Tool\033[0m" << endl;
@@ -51,6 +78,7 @@ int Menu::Terminal() {
 
                             cout << "\033[1;34mDo you want to check a specific city? \033[0m"
                                  << "\033[1;33m [ Y | N ]\033[0m" << endl;
+                            cout << "\033[1;33mDISCLAIMER : While specifying a city, it is always checked assuming overflow\033[0m" << endl;
                             cin >> input;
                             cout << endl << endl;
 
@@ -60,13 +88,132 @@ int Menu::Terminal() {
                                 cin >> input;
                                 cout << endl << endl;
 
+                                string city_name;
+                                string city_code;
+                                double res = 0;
+                                for(auto a : hashReservoirs.reservoirsTable){
+                                    Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                                    pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+                                }
+                                for(auto a : hashCities.citiesTable){
+                                    if(a.getCode() == input){
+                                        city_name = a.getName();
+                                        city_code = a.getCode();
+                                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                                        pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), INT_MAX);
+                                    }
+                                }
+                                pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                                for(auto a : hashCities.citiesTable){
+                                    if(a.getCode() == input){
+                                        Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
+                                        for(auto b: check_flow->getIncoming()){
+                                            res = res + b->getFlow();
+                                        }
+                                    }
+                                }
+                                cout << "\033[1;32mCity \033[0m" << city_name << "\033[1;32m of code \033[0m" << city_code << "\033[1;32m has a maximum flow of \033[0m" << res << endl << endl << endl;
 
                                 decision = 9;
 
                             } else if (input == "n" || input == "N") {
 
+                                cout << "\033[1;34mDo you wish to consider overflow? \033[0m" << "\033[1;33m [ Y | N ]\033[0m" << endl;
+                                cin >> input;
+                                cout << endl << endl;
 
-                                decision = 9;
+                                if (input == "y" || input == "Y") {
+
+                                    for(auto a : hashReservoirs.reservoirsTable){
+                                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                                        pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+                                    }
+
+                                    for(auto a : hashCities.citiesTable){
+                                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                                        pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), INT_MAX);
+                                    }
+                                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                                    double max_flow = 0;
+                                    for(auto a : hashCities.citiesTable){
+                                        double res = 0;
+                                        Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
+                                        for(auto b : check_flow->getIncoming()){
+                                            res = res + b->getFlow();
+                                        }
+                                        max_flow = max_flow + res;
+                                        cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
+
+                                    }
+                                    cout << endl << "\033[1;32mMaximum total flow is \033[0m" << max_flow << endl << endl;
+
+                                    cout << "\033[1;34mDo you wish to check for any cities where the flow isn't enough? \033[0m" << "\033[1;33m [ Y | N ]\033[0m" << endl;
+                                    cin >> input;
+                                    cout << endl << endl;
+
+                                    if (input == "y" || input == "Y") {
+
+                                        for (size_t i = 0; i < not_full.size() - 2; i += 3) {
+                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a maximum flow of \033[0m" << stoi(not_full[i + 2]) << endl << endl << endl;
+                                        }
+
+                                    }
+
+                                    decision = 9;
+
+                                } else if (input == "n" || input == "N") {
+
+                                    for(auto a : hashReservoirs.reservoirsTable){
+                                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                                        pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+                                    }
+
+                                    for(auto a : hashCities.citiesTable){
+                                        Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
+                                        pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), a.getDemand());
+                                    }
+                                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                                    double max_flow = 0;
+                                    for(auto a : hashCities.citiesTable){
+                                        double res = 0;
+                                        Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
+                                        for(auto b : check_flow->getIncoming()){
+                                            res = res + b->getFlow();
+                                        }
+                                        max_flow = max_flow + res;
+                                        cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
+
+                                        const Cities* d = hashCities.findCity(a.getCode());
+                                        if(res<d->getDemand())
+                                        {
+                                            not_full.push_back(a.getName());
+                                            not_full.push_back(a.getCode());
+                                            double missing = (d->getDemand()) - res;
+                                            not_full.push_back(to_string(missing));
+                                        }
+
+                                    }
+                                    cout << endl << "\033[1;32mMaximum total flow is \033[0m" << max_flow << endl << endl;
+
+                                    cout << "\033[1;34mDo you wish to check for any cities where the flow isn't enough? \033[0m" << "\033[1;33m [ Y | N ]\033[0m" << endl;
+                                    cin >> input;
+                                    cout << endl << endl;
+
+                                    if (input == "y" || input == "Y") {
+
+                                        for (size_t i = 0; i < not_full.size() - 2; i += 3) {
+                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a maximum flow of \033[0m" << stoi(not_full[i + 2]) << endl << endl << endl;
+                                        }
+
+                                    }
+
+                                    decision = 9;
+
+                                } else {
+
+                                    cout << "\033[1;31mInput error - Going back\033[0m" << endl << endl;
+
+                                }
 
                             } else {
 
