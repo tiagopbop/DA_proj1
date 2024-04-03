@@ -17,18 +17,22 @@ using namespace std;
 class HashStations;
 class HashCities;
 class HashReservoirs;
+class Stations;
 class Pipes{
 public:
     Graph<string> pipes;
+    Graph<string> pipes_copy;
+    void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations);
+    void ReadLines_copy(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, Stations stations);
 
     void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, int decision);
 
-    void OneCity(string source, string target);
+    void OneCity(string source, string target, Graph<string> pipe);
     string maxFlow(bool specific, string city);
-    void edmondsKarp(string source, string target);
+    void edmondsKarp(string source, string target, Graph<string> pipe);
     void augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f);
     double findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t);
-    bool findAugmentingPath( Vertex<string> *s, Vertex<string> *t);
+    bool findAugmentingPath( Vertex<string> *s, Vertex<string> *t, Graph<string> pipe);
     void testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vertex<string> *w, double residual);
 
     };

@@ -61,9 +61,9 @@ void Pipes:: testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vert
 
 
 // Function to find an augmenting path using Breadth-First Search
-bool Pipes:: findAugmentingPath( Vertex<string> *s, Vertex<string> *t) {
+bool Pipes:: findAugmentingPath( Vertex<string> *s, Vertex<string> *t, Graph<string> pipe) {
 // Mark all vertices as not visited
-    for(auto v : pipes.getVertexSet()) {
+    for(auto v : pipe.getVertexSet()) {
         v->setVisited(false);
     }
 // Mark the source vertex as visited and enqueue it
@@ -87,10 +87,9 @@ bool Pipes:: findAugmentingPath( Vertex<string> *s, Vertex<string> *t) {
     return t->isVisited();
 }
     //pepe is a maxflow struct
-void Pipes::OneCity(string source, string target) {
-    edmondsKarp(source,target);
+void Pipes::OneCity(string source, string target, Graph<string> pipe) {
+    edmondsKarp(source,target, pipe);
     for(auto a: pipes.getVertexSet()) {
-
     }}
 
 
@@ -134,18 +133,53 @@ void Pipes::augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f)
 
 // Main function implementing the Edmonds-Karp algorithm
 
-void Pipes:: edmondsKarp(string source, string target) {
-    Vertex<string>* s = pipes.findVertex(source);
-    Vertex<string>* t = pipes.findVertex(target);
+void Pipes:: edmondsKarp(string source, string target, Graph<string> pipe) {
+    Vertex<string>* s = pipe.findVertex(source);
+    Vertex<string>* t = pipe.findVertex(target);
 // Initialize flow on all edges to 0
-    for (auto v : pipes.getVertexSet()) {
+    for (auto v : pipe.getVertexSet()) {
         for (auto e: v->getAdj()) {
             e->setFlow(0);
         }
     }
 // While there is an augmenting path, augment the flow along the path
-    while( findAugmentingPath(s, t) ) {
+    while( findAugmentingPath(s, t, pipe) ) {
         double f = findMinResidualAlongPath(s, t);
         augmentFlowAlongPath(s, t, f);
+    }
+}
+
+void Pipes::ReadLines_copy(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Stations station) {
+    string input = "../data/Pipes_Madeira.csv";
+    ifstream MyReadFile(input);
+    for(auto a : hashReservoirs.reservoirsTable){
+        pipes_copy.addVertex(a.getCode());
+    }
+    for(auto a : hashCities.citiesTable){
+        pipes_copy.addVertex(a.getCode());
+    }
+    for(auto a : hashStations.stationsTable){
+        pipes_copy.addVertex(a.getCode());
+    }
+    string line;
+    string sa;
+    string sb;
+    string cap;
+    string dir;
+    getline(MyReadFile, line);
+    while (std::getline(MyReadFile, line)) {
+        stringstream ss(line);
+        getline(ss, sa, ',');
+        getline(ss, sb, ',');
+        getline(ss, cap, ',');
+        getline(ss, dir, '\r');
+        if (!(sa == station.getCode() || sb == station.getCode())) {
+            if (dir == "1") {
+                pipes_copy.addEdge(sa, sb, stod(cap));
+            } else {
+                pipes_copy.addBidirectionalEdge(sa, sb, stod(cap));
+            }
+
+        }
     }
 }

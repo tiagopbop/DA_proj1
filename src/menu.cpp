@@ -39,6 +39,8 @@ int Menu::Terminal() {
 
 
     HashCities hashCities;
+    hashCities.readLines(pipes, chs_fl);
+
     hashCities.readLines(pipes,chs_fl);
 
     HashReservoirs hashReservoirs;
@@ -136,7 +138,7 @@ int Menu::Terminal() {
                                         pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), INT_MAX);
                                     }
                                 }
-                                pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                                pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo(), pipes.pipes);
                                 for(auto a : hashCities.citiesTable){
                                     if(a.getCode() == input){
                                         Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
@@ -166,7 +168,7 @@ int Menu::Terminal() {
                                         Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), INT_MAX);
                                     }
-                                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo(), pipes.pipes);
                                     double max_flow = 0;
                                     for(auto a : hashCities.citiesTable){
                                         double res = 0;
@@ -209,7 +211,7 @@ int Menu::Terminal() {
                                         Vertex<string>* add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(add->getInfo(),super_sink->getInfo(), a.getDemand());
                                     }
-                                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo());
+                                    pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo(), pipes.pipes);
                                     double max_flow = 0;
                                     for(auto a : hashCities.citiesTable){
                                         double res = 0;
@@ -273,10 +275,60 @@ int Menu::Terminal() {
                             }
 
                             break;
-                        case 2:
+                        case 2: {
+                            string code;
+                            cout << "Select a pumping station to be removed:";
+                            cin>>code;
+                            Pipes pipes_copy;
+                            HashStations stations_copy;
+                            HashCities cities_copy;
+                            HashReservoirs reservoirs_copy;
+                            for (auto a: hashStations.stationsTable) {
+                                if(a.getCode() == code){
+                                    pipes_copy.ReadLines_copy(hashReservoirs, hashCities, hashStations, a);
+                                    pipes_copy.pipes_copy.addVertex("super_source");
+                                    pipes_copy.pipes_copy.addVertex("super_sink");
+                                    Vertex<string>* super_source_copy = pipes_copy.pipes_copy.findVertex("super_source");
+                                    Vertex<string>* super_sink_copy = pipes_copy.pipes_copy.findVertex("super_sink");
+                                    for(auto j : hashReservoirs.reservoirsTable){
+                                        Vertex<string>* add = pipes_copy.pipes_copy.findVertex(j.getCode());
+                                        pipes_copy.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(), j.getMaxDel());
+                                    }
 
+                                    for(auto k : hashCities.citiesTable){
+                                        Vertex<string>* add = pipes_copy.pipes_copy.findVertex(k.getCode());
+                                        pipes_copy.pipes_copy.addEdge(add->getInfo(),super_sink_copy->getInfo(), k.getDemand());
+                                    }
+
+                                    pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(), pipes_copy.pipes_copy);
+
+                                    cout<<"City - Flow / Demand"<<endl;
+                                    for (auto b: hashCities.citiesTable) {
+                                        Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
+                                        double flow = 0;
+                                        for (auto c: check_incoming->getIncoming()) {
+                                            flow = flow + c->getFlow();
+                                        }
+                                        cout<<b.getCode()<<"  - "<<flow<<" / "<<b.getDemand();
+                                        if(flow < b.getDemand()){
+                                            double deficit = b.getDemand() - flow;
+                                            cout<<"   (deficit of "<<deficit<<")";
+                                        }
+                                        cout<<endl;
+                                    }
+
+                                    cout << endl;
+                                    for (auto v : pipes_copy.pipes_copy.getVertexSet()) {
+                                        for (auto e : v->getAdj()) {
+                                            pipes_copy.pipes_copy.removeEdge(v->getInfo(), e->getDest()->getInfo());
+                                        }
+                                        pipes_copy.pipes_copy.removeVertex(v->getInfo());
+                                    }
+                                }
+                            }
 
                             break;
+                        }
                         case 3:
 
 
