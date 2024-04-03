@@ -6,8 +6,16 @@
 #include <vector>
 #include "pipes.h"
 using namespace std;
-void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations) {
-    string input = "../data/Pipes_Madeira.csv";
+void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, int decision) {
+
+    string input;
+
+    if (decision == 1) {
+        input = "../data/Pipes.csv";
+    } else {
+        input = "../data/Pipes_Madeira.csv";
+    }
+
     ifstream MyReadFile(input);
 
     string line;
@@ -33,12 +41,6 @@ void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashS
         }
     }
     }
-
-string Pipes::maxFlow(bool specific, string city) {
-
-}
-
-
 
 
 

@@ -9,8 +9,16 @@
 #include "pipes.h"
 
 using namespace std;
-void HashCities::readLines(Pipes &pipes) {
-    string input = "../data/Cities_Madeira.csv";
+void HashCities::readLines(Pipes &pipes, int decision) {
+
+    string input;
+
+    if (decision == 1) {
+        input = "../data/Cities.csv";
+    } else {
+        input = "../data/Cities_Madeira.csv";
+    }
+
     ifstream MyReadFile(input);
 
     string line;

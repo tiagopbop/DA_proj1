@@ -12,39 +12,62 @@ int Menu::Terminal() {
 
     Pipes pipes;
 
-    HashCities hashCities;
-    hashCities.readLines(pipes);
-
-
-    HashReservoirs hashReservoirs;
-    hashReservoirs.readLines(pipes);
-
-    HashStations hashStations;
-    hashStations.readLines(pipes);
-
-    pipes.ReadLines(hashReservoirs,hashCities,hashStations);
-
-    pipes.pipes.addVertex("super_source");
-    pipes.pipes.addVertex("super_sink");
-
-    Vertex<string>* super_source = pipes.pipes.findVertex("super_source");
-    Vertex<string>* super_sink = pipes.pipes.findVertex("super_sink");
-
-    vector<string> not_full;
+    int decision;
+    int chs_fl;
+    string input;
 
     cout << endl;
     cout << "\033[1;34mWelcome to the Water Supply Management Analysis Tool\033[0m" << endl;
     cout << endl;
+    cout << "\033[1;33mPlease select the data origin to be analyzed?\033[0m" << endl;
+    cout << "\033[1;33m[ 1 ]\033[0m" << " Continental Portugal" << endl;
+    cout << "\033[1;33m[ 2 ]\033[0m" << " 'Madeira' Island" << endl;
+    cout << endl;
+    cout << "\033[1;33m[ This can be changed later without restarting the program ]\033[0m" << endl;
+    cout << endl;
+
+    cout << "\033[1;34mDecision: \033[0m";
+    cin >> chs_fl;
+    cout << endl;
+
+    HashCities hashCities;
+    hashCities.readLines(pipes,chs_fl);
+
+    HashReservoirs hashReservoirs;
+    hashReservoirs.readLines(pipes,chs_fl);
+
+    HashStations hashStations;
+    hashStations.readLines(pipes,chs_fl);
+
+    pipes.ReadLines(hashReservoirs,hashCities,hashStations,chs_fl);
+
+    pipes.pipes.addVertex("super_source");
+    pipes.pipes.addVertex("super_sink");
+
+    Vertex<string>* super_source;
+    Vertex<string>* super_sink;
+
+    super_source = pipes.pipes.findVertex("super_source");
+    super_sink = pipes.pipes.findVertex("super_sink");
+
+    vector<string> not_full;
+
+    if (chs_fl == 1) {
+        cout << "\033[1;32mContinental Portugal chosen successfully\033[0m" << endl;
+    } else if (chs_fl == 2) {
+        cout << "\033[1;32mIsland 'Madeira' chosen successfully\033[0m" << endl;
+    } else {
+        cout << "\033[1;33mUnrecognized answer - Proceeding with 'Madeira'\033[0m" << endl;
+    }
+
+    cout << endl << endl;
     cout << "\033[1;34mWhat do you wish to do?\033[0m" << endl;
 
     cout << "\033[1;36m[ 1 ]\033[0m" << " Basic Service Metrics" << endl;
     cout << "\033[1;36m[ 2 ]\033[0m" << " Reliability and Sensitivity to Failures" << endl;
-    cout << "\033[1;33m[ 9 ] Read and Parse the Input Data\033[0m" << endl;
+    cout << "\033[1;33m[ 9 ] Change the input data being analyzed\033[0m" << endl;
     cout << "\033[1;31m[ 0 ] Quit\033[0m" << endl;
     cout << endl;
-
-    int decision;
-    string input;
 
     cout << "\033[1;34mDecision: \033[0m";
     cin >> decision;
@@ -193,6 +216,8 @@ int Menu::Terminal() {
                                         }
 
                                     }
+
+
                                     cout << endl << "\033[1;32mMaximum total flow is \033[0m" << max_flow << endl << endl;
 
                                     cout << "\033[1;34mDo you wish to check for any cities where the flow isn't enough? \033[0m" << "\033[1;33m [ Y | N ]\033[0m" << endl;
@@ -202,8 +227,9 @@ int Menu::Terminal() {
                                     if (input == "y" || input == "Y") {
 
                                         for (size_t i = 0; i < not_full.size() - 2; i += 3) {
-                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a maximum flow of \033[0m" << stoi(not_full[i + 2]) << endl << endl << endl;
+                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a maximum flow of \033[0m" << stoi(not_full[i + 2]) << endl;
                                         }
+                                        cout << endl << endl;
 
                                     }
 
@@ -293,9 +319,38 @@ int Menu::Terminal() {
                 }
 
                 break;
-            case 3:
+            case 9:
 
+                for (auto v : pipes.pipes.getVertexSet()) {
+                    for (auto e : v->getAdj()) {
+                        pipes.pipes.removeEdge(v->getInfo(), e->getDest()->getInfo());
+                    }
+                    pipes.pipes.removeVertex(v->getInfo());
+                }
 
+                hashCities.citiesTable.clear();
+                hashReservoirs.reservoirsTable.clear();
+                hashStations.stationsTable.clear();
+
+                if (chs_fl == 1) {
+                    cout << "\033[1;32mSwitched to 'Madeira' successfully\033[0m" << endl;
+                    chs_fl = 2;
+                } else {
+                    cout << "\033[1;32mSwitched to Continental Portugal successfully\033[0m" << endl;
+                    chs_fl = 1;
+                }
+
+                hashCities.readLines(pipes,chs_fl);
+                hashReservoirs.readLines(pipes,chs_fl);
+                hashStations.readLines(pipes,chs_fl);
+
+                pipes.ReadLines(hashReservoirs,hashCities,hashStations,chs_fl);
+
+                pipes.pipes.addVertex("super_source");
+                pipes.pipes.addVertex("super_sink");
+
+                super_source = pipes.pipes.findVertex("super_source");
+                super_sink = pipes.pipes.findVertex("super_sink");
 
                 break;
             case 0:
@@ -304,7 +359,7 @@ int Menu::Terminal() {
             default:
 
                 cout << "\033[1;31mInput error - Going back\033[0m" << endl << endl;
-                decision = 9;
+                decision = 1;
 
                 break;
         }
@@ -315,7 +370,7 @@ int Menu::Terminal() {
 
             cout << "\033[1;36m[ 1 ]\033[0m" << " Basic Service Metrics" << endl;
             cout << "\033[1;36m[ 2 ]\033[0m" << " Reliability and Sensitivity to Failures" << endl;
-            cout << "\033[1;33m[ 9 ] Read and Parse the Input Data\033[0m" << endl;
+            cout << "\033[1;33m[ 9 ] Change the input data being analyzed\033[0m" << endl;
             cout << "\033[1;31m[ 0 ] Quit\033[0m" << endl;
             cout << endl;
 

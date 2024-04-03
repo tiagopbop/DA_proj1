@@ -54,7 +54,7 @@ typedef unordered_set<Reservoirs, ReservoirsHash,ReservoirsHash> ReservoirsTable
 class HashReservoirs{
 public:
     ReservoirsTable reservoirsTable;
-    void readLines(Pipes &pipes);
+    void readLines(Pipes &pipes, int decision);
 
     const Reservoirs* findReservoir(const string& code) const {
         Reservoirs dummyStation; // Create a dummy Stations object with the given code

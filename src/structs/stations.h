@@ -47,7 +47,7 @@ typedef unordered_set<Stations, StationsHash, StationsHash>StationsTable;
 class HashStations{
 public:
     StationsTable stationsTable;
-    void readLines(Pipes &pipes);
+    void readLines(Pipes &pipes, int decision);
 
 
     const Stations* findStation(const string& code) const {

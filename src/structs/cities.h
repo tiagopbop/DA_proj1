@@ -57,7 +57,7 @@ typedef unordered_set<Cities, CitiesHash,CitiesHash> CitiesTable;
 class HashCities{
 public:
     CitiesTable citiesTable;
-    void readLines(Pipes &pipes);
+    void readLines(Pipes &pipes, int decision);
 
 
     const Cities* findCity(const string& code) const {

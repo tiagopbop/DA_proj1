@@ -19,9 +19,9 @@ class HashReservoirs;
 class Pipes{
 public:
     Graph<string> pipes;
-    void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations);
 
-    string maxFlow(bool specific, string city);
+    void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, int decision);
+
     void edmondsKarp(string source, string target);
     void augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f);
     double findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t);

@@ -8,8 +8,16 @@
 #include <string>
 #include <iostream>
 using namespace std;
-void HashReservoirs::readLines(Pipes &pipes) {
-    string input = "../data/Reservoirs_Madeira.csv";
+void HashReservoirs::readLines(Pipes &pipes, int decision) {
+
+    string input;
+
+    if (decision == 1) {
+        input = "../data/Reservoir.csv";
+    } else {
+        input = "../data/Reservoirs_Madeira.csv";
+    }
+
     ifstream MyReadFile(input);
 
     string line;
