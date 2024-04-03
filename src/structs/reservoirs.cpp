@@ -36,7 +36,7 @@ void HashReservoirs::readLines(Pipes &pipes, int decision) {
         getline(ss, municipality, ',');
         getline(ss, id, ',');
         getline(ss, code, ',');
-        getline(ss, max_del, ',');
+        getline(ss, max_del, '\r');
 
         int a = stoi(id);
         double b = stod(max_del);

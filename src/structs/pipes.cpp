@@ -44,6 +44,7 @@ void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashS
 
 
 
+
 // Function to test the given vertex 'w' and visit it if conditions are met
 void Pipes:: testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vertex<string> *w, double residual) {
 // Check if the vertex 'w' is not visited and there is residual capacity
@@ -54,6 +55,7 @@ void Pipes:: testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vert
         q.push(w);
     }
 }
+
 
 
 
@@ -84,8 +86,12 @@ bool Pipes:: findAugmentingPath( Vertex<string> *s, Vertex<string> *t) {
 // Return true if a path to the target is found, false otherwise
     return t->isVisited();
 }
+    //pepe is a maxflow struct
+void Pipes::OneCity(string source, string target) {
+    edmondsKarp(source,target);
+    for(auto a: pipes.getVertexSet()) {
 
-
+    }}
 
 
 // Function to find the minimum residual capacity along the augmenting path
