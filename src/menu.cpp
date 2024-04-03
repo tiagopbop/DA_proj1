@@ -7,6 +7,7 @@
 #include "structs/stations.h"
 
 using namespace std;
+vector<max_flow_info> pipi;
 
 /*int Menu::flush() {
     puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -218,6 +219,13 @@ int Menu::Terminal() {
                                         }
                                         max_flow = max_flow + res;
                                         cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
+
+  //adicionei aqui guardar maxflow numa struct
+                                        max_flow_info m;
+                                        m.city_name = a.getName();
+                                        m.city_code = a.getCode();
+                                        m.flow = res;
+                                        pipi.push_back(m);
 
                                         const Cities* d = hashCities.findCity(a.getCode());
                                         if(res<d->getDemand())
