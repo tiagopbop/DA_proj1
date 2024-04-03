@@ -30,7 +30,13 @@ void HashStations::readLines(Pipes &pipes, int decision) {
         string id;
         string code;
         getline(ss, id, ',');
-        getline(ss, code, ',');
+
+        if (decision == 1) {
+            getline(ss, code, '\r');
+        } else {
+            getline(ss, code, ',');
+        }
+
         int a = stoi(id);
         stations = Stations(a, code);
         pipes.pipes.addVertex(code);
