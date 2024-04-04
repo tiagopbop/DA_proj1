@@ -149,18 +149,17 @@ void Pipes:: edmondsKarp(string source, string target, Graph<string> pipe) {
     }
 }
 
-void Pipes::ReadLines_copy(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Stations station) {
-    string input = "../data/Pipes_Madeira.csv";
+void Pipes::ReadLines_copy(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Stations station, int decision) {
+    string input;
+
+    if (decision == 1) {
+        input = "../data/Pipes.csv";
+    } else {
+        input = "../data/Pipes_Madeira.csv";
+    }
+
     ifstream MyReadFile(input);
-    for(auto a : hashReservoirs.reservoirsTable){
-        pipes_copy.addVertex(a.getCode());
-    }
-    for(auto a : hashCities.citiesTable){
-        pipes_copy.addVertex(a.getCode());
-    }
-    for(auto a : hashStations.stationsTable){
-        pipes_copy.addVertex(a.getCode());
-    }
+
     string line;
     string sa;
     string sb;

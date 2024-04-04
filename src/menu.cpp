@@ -177,7 +177,7 @@ int Menu::Terminal() {
                                             res = res + b->getFlow();
                                         }
                                         max_flow = max_flow + res;
-                                        cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
+                                        cout << "City " << a.getName() << " of code " << a.getCode() << " has a maximum flow of " << res << endl;
 
                                     }
                                     cout << endl << "\033[1;32mMaximum total flow is \033[0m" << max_flow << endl << endl;
@@ -220,7 +220,7 @@ int Menu::Terminal() {
                                             res = res + b->getFlow();
                                         }
                                         max_flow = max_flow + res;
-                                        cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
+                                        cout << "City " << a.getName() << " of code " << a.getCode() << " has a maximum flow of " << res << endl;
 
   //adicionei aqui guardar maxflow numa struct
                                         max_flow_info m;
@@ -283,27 +283,38 @@ int Menu::Terminal() {
                             HashStations stations_copy;
                             HashCities cities_copy;
                             HashReservoirs reservoirs_copy;
-                            for (auto a: hashStations.stationsTable) {
+                            stations_copy.readLines(pipes_copy,decision);
+                            cities_copy.readLines(pipes_copy,decision);
+                            reservoirs_copy.readLines(pipes_copy,decision);
+                            cout<<"decision = "<<decision;
+                            for(auto a : reservoirs_copy.reservoirsTable){
+                                cout<<a.getCode()<<endl;
+                            }
+                            for (auto a: stations_copy.stationsTable) {
                                 if(a.getCode() == code){
-                                    pipes_copy.ReadLines_copy(hashReservoirs, hashCities, hashStations, a);
+                                    pipes_copy.ReadLines_copy(reservoirs_copy, cities_copy, hashStations, a, decision);
                                     pipes_copy.pipes_copy.addVertex("super_source");
                                     pipes_copy.pipes_copy.addVertex("super_sink");
                                     Vertex<string>* super_source_copy = pipes_copy.pipes_copy.findVertex("super_source");
                                     Vertex<string>* super_sink_copy = pipes_copy.pipes_copy.findVertex("super_sink");
-                                    for(auto j : hashReservoirs.reservoirsTable){
+                                    for(auto j : reservoirs_copy.reservoirsTable){
                                         Vertex<string>* add = pipes_copy.pipes_copy.findVertex(j.getCode());
                                         pipes_copy.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(), j.getMaxDel());
                                     }
 
-                                    for(auto k : hashCities.citiesTable){
+                                    for(auto k : cities_copy.citiesTable){
                                         Vertex<string>* add = pipes_copy.pipes_copy.findVertex(k.getCode());
                                         pipes_copy.pipes_copy.addEdge(add->getInfo(),super_sink_copy->getInfo(), k.getDemand());
                                     }
 
                                     pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(), pipes_copy.pipes_copy);
-
-                                    cout<<"City - Flow / Demand"<<endl;
-                                    for (auto b: hashCities.citiesTable) {
+                                    for(auto a : pipes_copy.pipes_copy.getVertexSet()){
+                                        for(auto e : a->getAdj()){
+                                            cout<<e->getOrig()->getInfo()<<"->"<<e->getDest()->getInfo()<<endl;
+                                        }
+                                    }
+                                    cout<<"City - flow / Demand"<<endl;
+                                    for (auto b: cities_copy.citiesTable) {
                                         Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
                                         double flow = 0;
                                         for (auto c: check_incoming->getIncoming()) {
