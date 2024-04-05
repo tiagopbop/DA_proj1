@@ -42,11 +42,11 @@ void HashReservoirs::readLines(Pipes &pipes, int decision) {
         } else {
             getline(ss, max_del, ',');
         }
-
         int a = stoi(id);
         double b = stod(max_del);
         reservoirs = Reservoirs(reser, municipality, a, code, b);
         pipes.pipes.addVertex(code);
+        pipes.pipes_copy.addVertex(code);
         this->reservoirsTable.insert(reservoirs);
     }
 }

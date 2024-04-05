@@ -45,6 +45,7 @@ void HashCities::readLines(Pipes &pipes, int decision) {
         float b = stof(demand);
         Cities cities = Cities(city, a,code,b,population);
         pipes.pipes.addVertex(code);
+        pipes.pipes_copy.addVertex(code);
         this->citiesTable.insert(cities);
     }
 }
