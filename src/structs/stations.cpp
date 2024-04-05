@@ -40,6 +40,7 @@ void HashStations::readLines(Pipes &pipes, int decision) {
         int a = stoi(id);
         stations = Stations(a, code);
         pipes.pipes.addVertex(code);
+        pipes.pipes_copy.addVertex(code);
         this->stationsTable.insert(stations);
     }
 }
