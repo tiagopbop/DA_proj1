@@ -17,11 +17,9 @@ vector<max_flow_info> pipi;
 int Menu::Terminal() {
 
     Pipes pipes;
-
     int decision;
     int chs_fl;
     string input;
-
 
     cout << endl;
     cout << "\033[1;34mWelcome to the Water Supply Management Analysis Tool\033[0m" << endl;
@@ -326,14 +324,13 @@ int Menu::Terminal() {
 
                             break;
                         case 2: {
-                            cout<<"1 - Check if any pumping station can be temporarily taken out of service without affecting the delivery capacity to all the cities"<<endl;
-                            cout<<"2 - Select a pumping stations to be removed"<<endl;
+                            cout<<"1 - Print the effect of removing each pumping station"<<endl;
+                            cout<<"2 - Select a pumping station to be removed"<<endl;
                             int pumping_station;
                             cin>>pumping_station;
 
                             switch (pumping_station) {
                                 case 1:{
-                                    bool print = true;
                                     Pipes pipes_copy;
                                     HashStations stations_copy;
                                     HashCities cities_copy;
@@ -364,31 +361,23 @@ int Menu::Terminal() {
                                         }
 
                                         pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy.pipes_copy);
-                                        bool has_water = false;
+
+                                        cout<<"If "<<a.getCode()<<" is removed, this is the flow of each city: "<<endl;
+                                        cout<<"City - Flow / Demand"<<endl;
                                         for (auto b: cities_copy.citiesTable) {
                                             Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
                                             double flow = 0;
                                             for (auto c: check_incoming->getIncoming()) {
                                                 flow = flow + c->getFlow();
                                             }
-                                            //cout<<b.getCode()<<"  - "<<flow<<" / "<<b.getDemand()<<endl;
-
-                                            if(flow == 0){
-                                                has_water = true;
-                                                break;
+                                            cout<<b.getCode()<< " - "<<flow<<" / "<<b.getDemand();
+                                            if(flow < b.getDemand()){
+                                                double deficit = b.getDemand() - flow;
+                                                cout<<"  (Deficit of "<<deficit<<")";
                                             }
-
+                                            cout<<endl;
                                         }
-
-                                        if(has_water && print){
-                                          print = false;
-                                          cout<<"Pumping Stations: "<<endl;
-                                          cout<<a.getCode()<<endl;
-                                        }
-                                        else if(has_water){
-                                          cout<<a.getCode()<<endl;
-                                        }
-
+                                        cout<<endl;
                                         for (auto v: pipes_copy.pipes_copy.getVertexSet()) {
                                             for (auto e: v->getAdj()) {
                                                 pipes_copy.pipes_copy.removeEdge(v->getInfo(), e->getDest()->getInfo());
