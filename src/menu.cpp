@@ -93,9 +93,6 @@ int Menu::Terminal() {
                     cout << "\033[1;36m[ 1 ]\033[0m" << " Maximum amount of water that can reach each or a specific city"
                          << endl;
                     cout << "\033[1;36m[ 2 ]\033[0m"
-                         << " Check the water supply given to every delivery site and list those who have a deficit"
-                         << endl;
-                    cout << "\033[1;36m[ 3 ]\033[0m"
                          << " Balance the load of water across the entire network (Não percebi bem esta, vejam melhor depois)"
                          << endl;
                     cout << "\033[1;33m[ 9 ] Go back\033[0m" << endl;
@@ -137,18 +134,25 @@ int Menu::Terminal() {
                                     }
                                 }
                                 pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo(), pipes.pipes);
+                                Cities save;
                                 for(auto a : hashCities.citiesTable){
                                     if(a.getCode() == input){
+                                        save = a;
                                         Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
                                         for(auto b: check_flow->getIncoming()){
                                             res = res + b->getFlow();
                                         }
                                     }
                                 }
-                                cout << "\033[1;32mCity \033[0m" << city_name << "\033[1;32m of code \033[0m" << city_code << "\033[1;32m has a maximum flow of \033[0m" << res << endl << endl << endl;
+                                cout << "\033[1;32mCity \033[0m" << city_name << "\033[1;32m of code \033[0m" << city_code << "\033[1;32m has a maximum flow of \033[0m" << res << endl << endl;
 
-                                decision = 9;
+                                if(res<save.getDemand()) {
+                                    cout << "\033[1;33mThe city shown does not receive its minimum flow required with a deficit of \033[0m" << (save.getDemand() - res) << endl << endl << endl;
+                                } else {
+                                    cout << "\033[1;32mThe city shown receives its minimum flow required\033[0m" << endl << endl << endl;
+                                }
 
+                                
                             } else if (input == "n" || input == "N") {
 
                                 cout << "\033[1;34mDo you wish to consider overflow? \033[0m" << "\033[1;33m [ Y | N ]\033[0m" << endl;
@@ -175,7 +179,22 @@ int Menu::Terminal() {
                                             res = res + b->getFlow();
                                         }
                                         max_flow = max_flow + res;
-                                        cout << "City " << a.getName() << " of code " << a.getCode() << " has a maximum flow of " << res << endl;
+                                        cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
+
+                                        max_flow_info m;
+                                        m.city_name = a.getName();
+                                        m.city_code = a.getCode();
+                                        m.flow = res;
+                                        pipi.push_back(m);
+
+                                        const Cities* d = hashCities.findCity(a.getCode());
+                                        if(res<d->getDemand())
+                                        {
+                                            not_full.push_back(a.getName());
+                                            not_full.push_back(a.getCode());
+                                            double missing = (d->getDemand()) - res;
+                                            not_full.push_back(to_string(missing));
+                                        }
 
                                     }
                                     cout << endl << "\033[1;32mMaximum total flow is \033[0m" << max_flow << endl << endl;
@@ -187,8 +206,9 @@ int Menu::Terminal() {
                                     if (input == "y" || input == "Y") {
 
                                         for (size_t i = 0; i < not_full.size() - 2; i += 3) {
-                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a maximum flow of \033[0m" << stoi(not_full[i + 2]) << endl << endl << endl;
+                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a flow deficit of \033[0m" << stoi(not_full[i + 2]) << endl;
                                         }
+                                        cout << endl << endl;
 
                                     } else if (input == "n" || input == "N") {
                                         continue;
@@ -196,7 +216,7 @@ int Menu::Terminal() {
                                         cout << "\033[1;31mInput error - Moving on\033[0m" << endl << endl;
                                     }
 
-                                    decision = 9;
+                                    not_full.clear();
 
                                 } else if (input == "n" || input == "N") {
 
@@ -218,9 +238,8 @@ int Menu::Terminal() {
                                             res = res + b->getFlow();
                                         }
                                         max_flow = max_flow + res;
-                                        cout << "City " << a.getName() << " of code " << a.getCode() << " has a maximum flow of " << res << endl;
+                                        cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
 
-  //adicionei aqui guardar maxflow numa struct
                                         max_flow_info m;
                                         m.city_name = a.getName();
                                         m.city_code = a.getCode();
@@ -248,7 +267,7 @@ int Menu::Terminal() {
                                     if (input == "y" || input == "Y") {
 
                                         for (size_t i = 0; i < not_full.size() - 2; i += 3) {
-                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a maximum flow of \033[0m" << stoi(not_full[i + 2]) << endl;
+                                            cout << "\033[1;32mCity \033[0m" << not_full[i] << "\033[1;32m of code \033[0m" << not_full[i + 1] << "\033[1;32m has a flow deficit of \033[0m" << stoi(not_full[i + 2]) << endl;
                                         }
                                         cout << endl << endl;
 
@@ -258,7 +277,7 @@ int Menu::Terminal() {
                                         cout << "\033[1;31mInput error - Moving on\033[0m" << endl << endl;
                                     }
 
-                                    decision = 9;
+                                    not_full.clear();
 
                                 } else {
 
@@ -273,11 +292,7 @@ int Menu::Terminal() {
                             }
 
                             break;
-                        case 2: {
-
-                            break;
-                        }
-                        case 3:
+                        case 2:
 
 
                             break;
