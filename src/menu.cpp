@@ -70,6 +70,8 @@ int Menu::Terminal() {
         cout << "\033[1;33mUnrecognized answer - Proceeding with 'Madeira'\033[0m" << endl;
     }
 
+
+
     cout << endl << endl;
     cout << "\033[1;34mWhat do you wish to do?\033[0m" << endl;
 
@@ -86,11 +88,24 @@ int Menu::Terminal() {
 
 
     while (decision != 0) {
+        pipes.pipes.removeVertex("super_sink");
+        pipes.pipes.removeVertex("super_source");
+        pipes.pipes.addVertex("super_source");
+        pipes.pipes.addVertex("super_sink");
 
+        super_source = pipes.pipes.findVertex("super_source");
+        super_sink = pipes.pipes.findVertex("super_sink");
         switch (decision) {
             case 1:
 
                 while (decision != 0 && decision != 9) {
+                    pipes.pipes.removeVertex("super_sink");
+                    pipes.pipes.removeVertex("super_source");
+                    pipes.pipes.addVertex("super_source");
+                    pipes.pipes.addVertex("super_sink");
+
+                    super_source = pipes.pipes.findVertex("super_source");
+                    super_sink = pipes.pipes.findVertex("super_sink");
 
                     cout << "\033[1;36m[ 1 ]\033[0m" << " Maximum amount of water that can reach each or a specific city"
                          << endl;
@@ -322,7 +337,7 @@ int Menu::Terminal() {
                             cout << "\033[1;34mWhich water reservoir?\033[0m";
                             cin >> input;
                             cout << endl << endl;
-
+                            cout << "para implementar" << endl;
 
                             break;
                         case 2: {
@@ -467,8 +482,14 @@ int Menu::Terminal() {
                         }
                             break;
                         case 3:
-
-
+                            pipes.OneCity(super_source->getInfo(),super_sink->getInfo(),pipes.pipes,hashCities, hashReservoirs,chs_fl);
+                            for(auto a: pipes.pipes.getVertexSet())
+                            {
+                                for(auto b: a->getAdj())
+                                {
+                                    b->setFlow(0);
+                                }
+                            }
                             break;
                         case 0: case 9:
 
@@ -483,6 +504,7 @@ int Menu::Terminal() {
                 }
 
                 break;
+
             case 9:
 
                 for (auto v : pipes.pipes.getVertexSet()) {
