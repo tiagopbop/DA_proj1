@@ -183,16 +183,100 @@ public:
  * @complexity The time complexity of this function is O(n), where 'n' is the size of the vector of existing edges.
  */
     static bool check_existing_edge(const string& origin, const string& destiny, const vector<pair<string,string>>& rawr);
+/**
+ * @brief Calculates the maximum flow for a specific city and checks for overflow or deficit.
+ *
+ * This function calculates the maximum flow for a specific city in the network of pipes and checks if there is an overflow
+ * or a deficit in the flow compared to the city's demand. It then displays the city's information along with the flow
+ * and demand details.
+ *
+ * @param super_source Pointer to the super source vertex in the pipe network.
+ * @param super_sink Pointer to the super sink vertex in the pipe network.
+ * @param pipes Graph representing the network of pipes.
+ * @param hashCities Hash table containing information about cities.
+ * @param hashReservoirs Hash table containing information about reservoirs.
+ * @param input String representing the code of the city for which maximum flow needs to be calculated.
+ *
+ * @complexity
+ *     - Time: O(V + E) for initializing edges, O(V * E^2) for finding the maximum flow using the Edmonds-Karp algorithm,
+ *       and O(V) for iterating over the cities to find the specified city, where V is the number of vertices and E is
+ *       the number of edges in the graph.
+ *     - Space: O(V + E) for maintaining the graph structure and additional space for storing string input.
+ */
+    static void Max_flow_specific_city(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input);/**
+ * @brief Calculates the maximum flow through a network of pipes, considering reservoirs as sources and cities as sinks.
+ *
+ * This function calculates the maximum flow through a network of pipes, where reservoirs are considered as sources and cities
+ * as sinks. It then checks if any city's demand is not fully met by the flow. If the user wishes, it provides information
+ * about cities with deficits in their flow.
+ *
+ * @param super_source Pointer to the super source vertex in the pipe network.
+ * @param super_sink Pointer to the super sink vertex in the pipe network.
+ * @param pipes Graph representing the network of pipes.
+ * @param hashCities Hash table containing information about cities.
+ * @param hashReservoirs Hash table containing information about reservoirs.
+ * @param input String indicating whether the user wants to check for cities with deficits (Y or N).
+ * @param not_full Vector to store information about cities with deficits in flow.
+ * @param pipi Vector to store information about cities and their maximum flow.
+ *
+ * @complexity
+ *     - Time: O(V + E) for initializing edges and O(V * E^2) for finding the maximum flow using the Edmonds-Karp algorithm,
+ *       where V is the number of vertices and E is the number of edges in the graph.
+ *     - Space: O(V + E) for maintaining the graph structure and additional space for storing vectors and string input.
+ */
 
-    static void Max_flow_specific_city(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input);
+
     static void Max_flow_non_specific_city_with_overflow(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input, vector<string> not_full, vector<max_flow_info> pipi);
+    /**
+ * @brief Calculates the maximum flow through a network of pipes without considering overflow.
+ *
+ * This function calculates the maximum flow through a network of pipes, considering reservoirs as sources and cities
+ * as sinks. It does not consider overflow conditions. It then checks if any city's demand is not fully met by the flow.
+ * If the user wishes, it provides information about cities with deficits in their flow.
+ *
+ * @param super_source Pointer to the super source vertex in the pipe network.
+ * @param super_sink Pointer to the super sink vertex in the pipe network.
+ * @param pipes Graph representing the network of pipes.
+ * @param hashCities Hash table containing information about cities.
+ * @param hashReservoirs Hash table containing information about reservoirs.
+ * @param input String indicating whether the user wants to check for cities with deficits (Y or N).
+ * @param not_full Vector to store information about cities with deficits in flow.
+ * @param pipi Vector to store information about cities and their maximum flow.
+ *
+ * @complexity
+ *     - Time: O(V + E) for initializing edges and O(V * E^2) for finding the maximum flow using the Edmonds-Karp algorithm,
+ *       where V is the number of vertices and E is the number of edges in the graph.
+ *     - Space: O(V + E) for maintaining the graph structure and additional space for storing vectors and string input.
+ */
     static void Max_flow_non_specific_city_without_overflow(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input, vector<string> not_full, vector<max_flow_info> pipi);
-
+  /**  * @brief Removes a water reservoir from the network and updates flow and demand accordingly.
+    *
+    * This function removes a specified water reservoir from the network of pipes and updates the flow and demand
+    * of connected cities accordingly. It then displays the changes in flow and demand for each affected city.
+    *
+    * @param super_source Pointer to the super source vertex in the pipe network.
+    * @param super_sink Pointer to the super sink vertex in the pipe network.
+    * @param pipes Graph representing the network of pipes.
+    * @param cities Hash table containing information about cities.
+    * @param reservoirs Hash table containing information about reservoirs.
+    * @param input String indicating the code of the reservoir to be removed.
+    * @param not_full Vector to store information about cities with deficits in flow.
+    * @param chs_fl Integer representing the chosen flow option.
+    * @param cities_copy Hash table containing a copy of information about cities.
+    * @param reservoirs_copy Hash table containing a copy of information about reservoirs.
+    * @param stations_copy Hash table containing a copy of information about stations.
+    * @param pipes_copy Copy of the object of class Pipes.
+    *
+    * @complexity
+    *     - Time: O(V + E) for initializing edges, O(V * E^2) for finding the maximum flow using the Edmonds-Karp algorithm,
+            *       and O(V * E) for updating flow and demand after reservoir removal, where V is the number of vertices and E is
+    *       the number of edges in the graph.
+    *     - Space: O(V + E) for maintaining the graph structure and additional space for storing vectors and string input.
+    */
     static void Removing_reservoir(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities cities, HashReservoirs reservoirs, string input, vector<string> not_full, int chs_fl, HashCities cities_copy, HashReservoirs reservoirs_copy, HashStations stations_copy, Pipes pipes_copy);
 
 
 
-    //void Max_flow_specific_city(string super_source, string super_sink, Graph<string> pipe, )
 /**
  * @brief Balances the load of flow in the network of pipes.
  *
