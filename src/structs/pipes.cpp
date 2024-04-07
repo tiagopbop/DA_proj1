@@ -640,6 +640,14 @@ void Pipes:: OneCity(Graph<string>pipe,const HashCities& citii, const HashReserv
         }
     }
 
+    cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
+    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mCity\033[0m" << "\033[0;32m⎯⎯⎯⎯⎯│⎯\033[0m" << cit;
+    for (auto i = (46 - cit.length()); i > 0; i--) {
+        cout << "\033[0;32m⎯\033[0m";
+    }
+    cout << "\033[0;32m│\033[0m" << endl;
+
+    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mOrigin\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDestination\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDeficit\033[0m" << "\033[0;32m⎯⎯⎯⎯│⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mvariation\033[0m" << "\033[0;32m⎯⎯⎯│\033[0m" << endl;
 
     for (const auto &a: pipes_vector) {
         stations_copy.readLines(pipes_copy2, chs_fl);
@@ -681,27 +689,49 @@ void Pipes:: OneCity(Graph<string>pipe,const HashCities& citii, const HashReserv
                 flow_original = flow_original + c->getFlow();
             }
 
+
+
             if ( flow != flow_original && flow < b.getDemand()) {
                 if (print) {
 
-                    cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
-                    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mCity\033[0m" << "\033[0;32m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯│⎯\033[0m" << b.getCode();
-                    for (auto i = (25 - b.getCode().length()); i > 0; i--) {
+                    cout << "\033[0;32m│⎯\033[0m" << a.first;
+                    for (auto i = (9 - a.first.length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│⎯\033[0m" << a.second;
+                    for (auto i = (14 - a.second.length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│⎯\033[0m" << b.getDemand() - flow;
+                    for (auto i = (18 - to_string(b.getDemand() - flow).length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│⎯\033[0m" << flow_original - flow;
+                    for (auto i = (24 - to_string(flow_original - flow).length()); i > 0; i--) {
                         cout << "\033[0;32m⎯\033[0m";
                     }
                     cout << "\033[0;32m│\033[0m" << endl;
 
-                    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mOrigin\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDestination\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDeficit\033[0m" << "\033[0;32m⎯⎯⎯⎯│⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mvariation\033[0m" << "\033[0;32m⎯⎯⎯│\033[0m" << endl;
-                    cout << "\033[0;32m│⎯\033[0m";
-
-
-                    cout << "The city " << b.getCode() << " is affected by the following pipes: " << endl << a.first
-                         << "-" << a.second << "  with a deficit of " << b.getDemand() - flow << "and diff of"
-                         << flow_original - flow << endl;
                     print = false;
                 } else {
-                    cout << a.first << "-" << a.second << "  with a deficit of " << b.getDemand() - flow << "and diff of"
-                         << flow_original - flow << endl;
+
+                    cout << "\033[0;32m│⎯\033[0m" << a.first;
+                    for (auto i = (9 - a.first.length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│⎯\033[0m" << a.second;
+                    for (auto i = (14 - a.second.length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│⎯\033[0m" << b.getDemand() - flow;
+                    for (auto i = (18 - to_string(b.getDemand() - flow).length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│⎯\033[0m" << flow_original - flow;
+                    for (auto i = (24 - to_string(flow_original - flow).length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│\033[0m" << endl;
 
                 }
             }
@@ -1003,15 +1033,23 @@ void Pipes:: computeInitialMetrics(const Pipes& pipes2, int whi) {
     double variance = sumSquaredDifference / pipes2.pipes.getVertexSet().size();
 
     if(whi==0){
-    cout << "Unbalanced Metrics:" << endl;
+        cout << endl << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m"
+             << endl;
+        cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mUnbalanced\033[0m"
+             << "\033[0;32m⎯\033[0m" << "\033[1;33mmetrics\033[0m" << "\033[0;32m⎯│\033[0m" << endl;
+
     }
     else
     {
-        cout << endl << endl << "Balanced Metrics"<< endl;
+        cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m"
+             << endl;
+        cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mBalanced\033[0m"
+             << "\033[0;32m⎯\033[0m" << "\033[1;33mmetrics\033[0m" << "\033[0;32m⎯⎯⎯│\033[0m" << endl;
     }
-    cout << "Average Difference: " << averageDifference << endl;
-    cout << "Variance: " << variance << endl;
-    cout << "Maximum Difference: " << maxDifference << endl;
+
+    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mAverage\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mdifference\033[0m" << "\033[0;32m⎯⎯⎯ \033[0m" << averageDifference << endl << "\033[0;32m│⎯\033[0m""\033[1;33mVariance\033[0m" << "\033[0;32m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << variance << endl << "\033[0;32m│⎯\033[0m" << "\033[1;33mMaximum\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mdifference\033[0m" << "\033[0;32m⎯⎯⎯ \033[0m"
+    << maxDifference << endl << endl;
+
 }
 
 
