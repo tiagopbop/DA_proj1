@@ -9,10 +9,8 @@
 using namespace std;
 vector<max_flow_info> pipi;
 
-/*int Menu::flush() {
-    puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    return 0;
-}*/
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
 
 int Menu::Terminal() {
 
@@ -34,8 +32,6 @@ int Menu::Terminal() {
     cin >> chs_fl;
     cout << endl;
 
-
-
     HashCities hashCities;
     hashCities.readLines(pipes, chs_fl);
 
@@ -54,9 +50,6 @@ int Menu::Terminal() {
 
     Vertex<string>* super_source;
     Vertex<string>* super_sink;
-
-    super_source = pipes.pipes.findVertex("super_source");
-    super_sink = pipes.pipes.findVertex("super_sink");
 
     vector<string> not_full;
 
@@ -83,9 +76,6 @@ int Menu::Terminal() {
     cin >> decision;
     cout << endl << endl;
 
-    pipes.computeInitialMetrics(pipes,hashCities,hashReservoirs);
-    pipes.balanceLoad(pipes,hashCities,hashReservoirs);
-
     while (decision != 0) {
         switch (decision) {
             case 1:
@@ -103,7 +93,7 @@ int Menu::Terminal() {
                          << " Maximum amount of water that can reach each or a specific city"
                          << endl;
                     cout << "\033[1;36m[ 2 ]\033[0m"
-                         << " Balance the load of water across the entire network (Não percebi bem esta, vejam melhor depois)"
+                         << " Balance the load of water across the entire network"
                          << endl;
                     cout << "\033[1;33m[ 9 ] Go back\033[0m" << endl;
                     cout << "\033[1;31m[ 0 ] Quit\033[0m" << endl;
@@ -134,17 +124,17 @@ int Menu::Terminal() {
                                 string city_code;
                                 double city_demand;
                                 double res = 0;
-                                for (auto a: hashReservoirs.reservoirsTable) {
+                                for (const auto& a: hashReservoirs.reservoirsTable) {
                                     Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                     pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
                                 }
-                                for (auto a: hashCities.citiesTable) {
+                                for (const auto& a: hashCities.citiesTable) {
                                     Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                     pipes.pipes.addEdge(add->getInfo(), super_sink->getInfo(), a.getDemand());
                                 }
                                 pipes.edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
                                 Cities save;
-                                for (auto a: hashCities.citiesTable) {
+                                for (const auto& a: hashCities.citiesTable) {
                                     if (a.getCode() == input) {
                                         city_name = a.getName();
                                         city_code = a.getCode();
@@ -223,12 +213,12 @@ int Menu::Terminal() {
 
                                 if (input == "y" || input == "Y") {
 
-                                    for (auto a: hashReservoirs.reservoirsTable) {
+                                    for (const auto& a: hashReservoirs.reservoirsTable) {
                                         Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
                                     }
 
-                                    for (auto a: hashCities.citiesTable) {
+                                    for (const auto& a: hashCities.citiesTable) {
                                         Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(add->getInfo(), super_sink->getInfo(), INT_MAX);
                                     }
@@ -242,7 +232,7 @@ int Menu::Terminal() {
                                          << "\033[0;32m⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯│\033[0m"
                                          << endl;
 
-                                    for (auto a: hashCities.citiesTable) {
+                                    for (const auto& a: hashCities.citiesTable) {
                                         double res = 0;
                                         Vertex<string> *check_flow = pipes.pipes.findVertex(a.getCode());
                                         for (auto b: check_flow->getIncoming()) {
@@ -275,7 +265,6 @@ int Menu::Terminal() {
                                         max_flow_info m;
                                         m.city_name = a.getName();
                                         m.city_code = a.getCode();
-                                        m.flow = res;
                                         pipi.push_back(m);
 
                                         const Cities *d = hashCities.findCity(a.getCode());
@@ -342,7 +331,6 @@ int Menu::Terminal() {
 
                                     } else if (input == "n" || input == "N") {
                                         cout << endl;
-                                        continue;
                                     } else {
                                         cout << "\033[1;31mInput error - Moving on\033[0m" << endl << endl;
                                     }
@@ -351,12 +339,12 @@ int Menu::Terminal() {
 
                                 } else if (input == "n" || input == "N") {
 
-                                    for (auto a: hashReservoirs.reservoirsTable) {
+                                    for (const auto& a: hashReservoirs.reservoirsTable) {
                                         Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
                                     }
 
-                                    for (auto a: hashCities.citiesTable) {
+                                    for (const auto& a: hashCities.citiesTable) {
                                         Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(add->getInfo(), super_sink->getInfo(), a.getDemand());
                                     }
@@ -370,7 +358,7 @@ int Menu::Terminal() {
                                          << "\033[0;32m⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯│\033[0m"
                                          << endl;
 
-                                    for (auto a: hashCities.citiesTable) {
+                                    for (const auto& a: hashCities.citiesTable) {
                                         double res = 0;
                                         Vertex<string> *check_flow = pipes.pipes.findVertex(a.getCode());
                                         for (auto b: check_flow->getIncoming()) {
@@ -403,7 +391,6 @@ int Menu::Terminal() {
                                         max_flow_info m;
                                         m.city_name = a.getName();
                                         m.city_code = a.getCode();
-                                        m.flow = res;
                                         pipi.push_back(m);
 
                                         const Cities *d = hashCities.findCity(a.getCode());
@@ -471,7 +458,6 @@ int Menu::Terminal() {
 
                                     } else if (input == "n" || input == "N") {
                                         cout << endl;
-                                        continue;
                                     } else {
                                         cout << "\033[1;31mInput error - Moving on\033[0m" << endl << endl;
                                     }
@@ -493,10 +479,11 @@ int Menu::Terminal() {
                             break;
                         case 2:
 
+                            pipes.computeInitialMetrics(pipes);
+                            pipes.balanceLoad(pipes,hashCities,hashReservoirs);
 
                             break;
-                        case 9:
-                        case 0:
+                        case 0: case 9:
 
                             break;
                         default:
@@ -517,9 +504,6 @@ int Menu::Terminal() {
                     pipes.pipes.removeVertex("super_source");
                     pipes.pipes.addVertex("super_source");
                     pipes.pipes.addVertex("super_sink");
-
-                    super_source = pipes.pipes.findVertex("super_source");
-                    super_sink = pipes.pipes.findVertex("super_sink");
 
                     cout << "\033[1;36m[ 1 ]\033[0m"
                          << " Check the delivery capacity of the network putting one water reservoir out of commission"
@@ -552,22 +536,21 @@ int Menu::Terminal() {
                             stations_copy.readLines(pipes_copy, chs_fl);
                             cities_copy.readLines(pipes_copy, chs_fl);
                             reservoirs_copy.readLines(pipes_copy, chs_fl);
-                            for (auto a: reservoirs_copy.reservoirsTable) {
+                            for (const auto& a: reservoirs_copy.reservoirsTable) {
                                 if (a.getCode() == input) {
-                                    pipes_copy.ReadLines_copy_reservoirs(reservoirs_copy, cities_copy, stations_copy, a,
-                                                                         chs_fl);
+                                    pipes_copy.ReadLines_copy_reservoirs(a, chs_fl);
                                     pipes_copy.pipes_copy.addVertex("super_source");
                                     pipes_copy.pipes_copy.addVertex("super_sink");
                                     Vertex<string> *super_source_copy = pipes_copy.pipes_copy.findVertex(
                                             "super_source");
                                     Vertex<string> *super_sink_copy = pipes_copy.pipes_copy.findVertex("super_sink");
 
-                                    for (auto j: reservoirs_copy.reservoirsTable) {
+                                    for (const auto& j: reservoirs_copy.reservoirsTable) {
                                         Vertex<string> *add = pipes_copy.pipes_copy.findVertex(j.getCode());
                                         pipes_copy.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(),
                                                                       j.getMaxDel());
                                     }
-                                    for (auto k: cities_copy.citiesTable) {
+                                    for (const auto& k: cities_copy.citiesTable) {
                                         Vertex<string> *add = pipes_copy.pipes_copy.findVertex(k.getCode());
                                         pipes_copy.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),
                                                                       k.getDemand());
@@ -578,7 +561,7 @@ int Menu::Terminal() {
 
                                     cout << "City - flow / Demand" << endl;
                                     double res = 0;
-                                    for (auto b: cities_copy.citiesTable) {
+                                    for (const auto& b: cities_copy.citiesTable) {
                                         Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
                                         double flow = 0;
                                         for (auto c: check_incoming->getIncoming()) {
@@ -623,25 +606,25 @@ int Menu::Terminal() {
                                 case 1:
 
                                     stations_copy.readLines(pipes_copy, chs_fl);
-                                    for(auto a: stations_copy.stationsTable){
+                                    for(const auto& a: stations_copy.stationsTable){
                                         stations_vector.push_back(a);
                                     }
                                     stations_copy.stationsTable.clear();
-                                    for (auto a: stations_vector) {
+                                    for (const auto& a: stations_vector) {
                                         stations_copy.readLines(pipes_copy, chs_fl);
                                         cities_copy.readLines(pipes_copy, chs_fl);
                                         reservoirs_copy.readLines(pipes_copy, chs_fl);
-                                        pipes_copy.ReadLines_copy_station(reservoirs_copy, cities_copy, stations_copy, a, chs_fl);
+                                        pipes_copy.ReadLines_copy_station(a, chs_fl);
                                         pipes_copy.pipes_copy.addVertex("super_source");
                                         pipes_copy.pipes_copy.addVertex("super_sink");
                                         Vertex<string> *super_source_copy = pipes_copy.pipes_copy.findVertex("super_source");
                                         Vertex<string> *super_sink_copy = pipes_copy.pipes_copy.findVertex("super_sink");
 
-                                        for (auto j: reservoirs_copy.reservoirsTable) {
+                                        for (const auto& j: reservoirs_copy.reservoirsTable) {
                                             Vertex<string> *add = pipes_copy.pipes_copy.findVertex(j.getCode());
                                             pipes_copy.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(),j.getMaxDel());
                                         }
-                                        for (auto k: cities_copy.citiesTable) {
+                                        for (const auto& k: cities_copy.citiesTable) {
                                             Vertex<string> *add = pipes_copy.pipes_copy.findVertex(k.getCode());
                                             pipes_copy.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),k.getDemand());
                                         }
@@ -658,7 +641,7 @@ int Menu::Terminal() {
                                         cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mCode\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯⎯⎯⎯│⎯\033[0m" << "\033[1;33mDemand\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDeficit\033[0m" << "\033[0;32m⎯⎯⎯│\033[0m" << endl;
 
 
-                                        for (auto b: cities_copy.citiesTable) {
+                                        for (const auto& b: cities_copy.citiesTable) {
                                             Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
                                             double flow = 0;
                                             for (auto c: check_incoming->getIncoming()) {
@@ -714,21 +697,21 @@ int Menu::Terminal() {
                                     stations_copy.readLines(pipes_copy, chs_fl);
                                     cities_copy.readLines(pipes_copy, chs_fl);
                                     reservoirs_copy.readLines(pipes_copy, chs_fl);
-                                    for (auto a: stations_copy.stationsTable) {
+                                    for (const auto& a: stations_copy.stationsTable) {
                                         if (a.getCode() == input) {
-                                            pipes_copy.ReadLines_copy_station(reservoirs_copy, cities_copy, stations_copy, a, chs_fl);
+                                            pipes_copy.ReadLines_copy_station(a, chs_fl);
                                             pipes_copy.pipes_copy.addVertex("super_source");
                                             pipes_copy.pipes_copy.addVertex("super_sink");
                                             Vertex<string> *super_source_copy = pipes_copy.pipes_copy.findVertex(
                                                     "super_source");
                                             Vertex<string> *super_sink_copy = pipes_copy.pipes_copy.findVertex("super_sink");
 
-                                            for (auto j: reservoirs_copy.reservoirsTable) {
+                                            for (const auto& j: reservoirs_copy.reservoirsTable) {
                                                 Vertex<string> *add = pipes_copy.pipes_copy.findVertex(j.getCode());
                                                 pipes_copy.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(),
                                                                               j.getMaxDel());
                                             }
-                                            for (auto k: cities_copy.citiesTable) {
+                                            for (const auto& k: cities_copy.citiesTable) {
                                                 Vertex<string> *add = pipes_copy.pipes_copy.findVertex(k.getCode());
                                                 pipes_copy.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),
                                                                               k.getDemand());
@@ -746,7 +729,7 @@ int Menu::Terminal() {
 
                                             cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mCode\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯⎯⎯⎯│⎯\033[0m" << "\033[1;33mDemand\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDeficit\033[0m" << "\033[0;32m⎯⎯⎯│\033[0m" << endl;
 
-                                            for (auto b: cities_copy.citiesTable) {
+                                            for (const auto& b: cities_copy.citiesTable) {
                                                 Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
                                                 double flow = 0;
                                                 for (auto c: check_incoming->getIncoming()) {
@@ -803,7 +786,7 @@ int Menu::Terminal() {
                             }
                             break;
                         case 3:
-                            pipes.OneCity(super_source->getInfo(),super_sink->getInfo(),pipes.pipes,hashCities, hashReservoirs,chs_fl);
+                            pipes.OneCity(pipes.pipes,hashCities, hashReservoirs,chs_fl);
                             for(auto a: pipes.pipes.getVertexSet())
                             {
                                 for(auto b: a->getAdj())
@@ -851,13 +834,10 @@ int Menu::Terminal() {
                 hashReservoirs.readLines(pipes,chs_fl);
                 hashStations.readLines(pipes,chs_fl);
 
-                pipes.ReadLines(hashReservoirs,hashCities,hashStations,chs_fl);
+                pipes.ReadLines(chs_fl);
 
                 pipes.pipes.addVertex("super_source");
                 pipes.pipes.addVertex("super_sink");
-
-                super_source = pipes.pipes.findVertex("super_source");
-                super_sink = pipes.pipes.findVertex("super_sink");
 
                 break;
             case 0:
@@ -891,3 +871,4 @@ int Menu::Terminal() {
 
     return 0;
 }
+#pragma clang diagnostic pop

@@ -1,11 +1,10 @@
-//
-// Created by loading on 05-03-2024.
-//
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include "pipes.h"
+
 using namespace std;
+
 void Pipes::ReadLines(int decision) {
 
     string input;
@@ -144,7 +143,7 @@ void Pipes:: edmondsKarp(string source, string target, Graph<string> pipe) {
     }
 }
 
-void Pipes::ReadLines_copy_reservoirs(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Reservoirs reservoir, int decision) {
+void Pipes::ReadLines_copy_reservoirs(Reservoirs reservoir, int decision) {
     string input;
 
     if (decision == 1) {
@@ -178,7 +177,7 @@ void Pipes::ReadLines_copy_reservoirs(HashReservoirs hashReservoirs,HashCities h
     }
 }
 
-void Pipes::ReadLines_copy_station(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Stations station, int decision) {
+void Pipes::ReadLines_copy_station(Stations station, int decision) {
     string input;
 
     if (decision == 1) {
@@ -214,7 +213,7 @@ void Pipes::ReadLines_copy_station(HashReservoirs hashReservoirs,HashCities hash
 
 
 
-void Pipes::ReadLines_copy_edgeless(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, int decision, pair<string,string> pp) {
+void Pipes::ReadLines_copy_edgeless(int decision, pair<string,string> pp) {
     string input;
 
     if (decision == 1) {
@@ -269,8 +268,8 @@ bool Pipes::check_existing_edge(string origin, string destiny, vector<pair<strin
 
 
 //pepe is a maxflow struct
-void Pipes::OneCity(string source, string target, Graph<string> pipe,HashCities citii, HashReservoirs reserr, int chs_fl) {
-    Pipes pipes_copy;
+void Pipes::OneCity(Graph<string> pipe,HashCities citii, HashReservoirs reserr, int chs_fl) {
+    Pipes pipes_copy2;
     HashStations stations_copy;
     HashCities cities_copy;
     HashReservoirs reservoirs_copy;
@@ -306,33 +305,33 @@ void Pipes::OneCity(string source, string target, Graph<string> pipe,HashCities 
 
     for (auto a: pipes_vector) {
         bool print = true;
-        stations_copy.readLines(pipes_copy, chs_fl);
-        cities_copy.readLines(pipes_copy, chs_fl);
-        reservoirs_copy.readLines(pipes_copy, chs_fl);
-        pipes_copy.ReadLines_copy_edgeless(reservoirs_copy, cities_copy, stations_copy, chs_fl,a);
-        pipes_copy.pipes_copy.addVertex("super_source");
-        pipes_copy.pipes_copy.addVertex("super_sink");
-        Vertex<string> *super_source_copy = pipes_copy.pipes_copy.findVertex("super_source");
-        Vertex<string> *super_sink_copy = pipes_copy.pipes_copy.findVertex("super_sink");
+        stations_copy.readLines(pipes_copy2, chs_fl);
+        cities_copy.readLines(pipes_copy2, chs_fl);
+        reservoirs_copy.readLines(pipes_copy2, chs_fl);
+        pipes_copy2.ReadLines_copy_edgeless(chs_fl,a);
+        pipes_copy2.pipes_copy.addVertex("super_source");
+        pipes_copy2.pipes_copy.addVertex("super_sink");
+        Vertex<string> *super_source_copy = pipes_copy2.pipes_copy.findVertex("super_source");
+        Vertex<string> *super_sink_copy = pipes_copy2.pipes_copy.findVertex("super_sink");
 
 
         for (auto j: reservoirs_copy.reservoirsTable) {
-            Vertex<string> *add = pipes_copy.pipes_copy.findVertex(j.getCode());
-            pipes_copy.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(),j.getMaxDel());
+            Vertex<string> *add = pipes_copy2.pipes_copy.findVertex(j.getCode());
+            pipes_copy2.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(),j.getMaxDel());
         }
 
 
         for (auto k: cities_copy.citiesTable) {
-            Vertex<string> *add = pipes_copy.pipes_copy.findVertex(k.getCode());
-            pipes_copy.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),k.getDemand());
+            Vertex<string> *add = pipes_copy2.pipes_copy.findVertex(k.getCode());
+            pipes_copy2.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),k.getDemand());
         }
 
 
 
-        pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy.pipes_copy);
+        pipes_copy2.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy2.pipes_copy);
 
         for (auto b: cities_copy.citiesTable) {
-            Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
+            Vertex<string> *check_incoming = pipes_copy2.pipes_copy.findVertex(b.getCode());
             double flow = 0;
             for (auto c: check_incoming->getIncoming()) {
                 flow = flow + c->getFlow();
@@ -395,11 +394,11 @@ void Pipes::OneCity(string source, string target, Graph<string> pipe,HashCities 
 
         if(!print) cout << endl << endl;
 
-        for (auto v: pipes_copy.pipes_copy.getVertexSet()) {
+        for (auto v: pipes_copy2.pipes_copy.getVertexSet()) {
             for (auto e: v->getAdj()) {
-                pipes_copy.pipes_copy.removeEdge(v->getInfo(), e->getDest()->getInfo());
+                pipes_copy2.pipes_copy.removeEdge(v->getInfo(), e->getDest()->getInfo());
             }
-            pipes_copy.pipes_copy.removeVertex(v->getInfo());
+            pipes_copy2.pipes_copy.removeVertex(v->getInfo());
         }
 
     }
@@ -412,7 +411,7 @@ void Pipes::OneCity(string source, string target, Graph<string> pipe,HashCities 
 
 
 
-void Pipes:: computeInitialMetrics(Pipes pipes,HashCities citii, HashReservoirs reserr) {
+void Pipes:: computeInitialMetrics(Pipes pipes2) {
 
     // Compute average, variance, and maximum difference
 
@@ -422,7 +421,7 @@ void Pipes:: computeInitialMetrics(Pipes pipes,HashCities citii, HashReservoirs 
     double maxDifference = 0;
     double dif = 0;
     int pipe_count =  0;
-    for(auto vv : pipes.pipes.getVertexSet()) {
+    for(auto vv : pipes2.pipes.getVertexSet()) {
         for(auto pip: vv->getAdj() )
         dif = pip->getWeight() - pip->getFlow();
         sumDifference +=dif;
@@ -433,13 +432,13 @@ void Pipes:: computeInitialMetrics(Pipes pipes,HashCities citii, HashReservoirs 
 
     double sumSquaredDifference = 0;
     dif = 0;
-    for(auto vv : pipes.pipes.getVertexSet()) {
+    for(auto vv : pipes2.pipes.getVertexSet()) {
         for(auto pip: vv->getAdj() )
          dif = pip->getWeight() - pip->getFlow();
         sumSquaredDifference += (dif - averageDifference) * (dif - averageDifference);
     }
 
-    double variance = sumSquaredDifference / pipes.pipes.getVertexSet().size();
+    double variance = sumSquaredDifference / pipes2.pipes.getVertexSet().size();
 
     std::cout << "Initial Metrics:" << std::endl;
     std::cout << "Average Difference: " << averageDifference << std::endl;
@@ -451,24 +450,24 @@ void Pipes:: computeInitialMetrics(Pipes pipes,HashCities citii, HashReservoirs 
 
 
 
-void Pipes:: balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr) {
+void Pipes:: balanceLoad(Pipes pipes2,HashCities citii, HashReservoirs reserr) {
     for (auto j: reserr.reservoirsTable) {
-        Vertex<string> *add = pipes.pipes.findVertex(j.getCode());
-        pipes.pipes.addEdge(pipes.pipes.findVertex("super_source")->getInfo(), add->getInfo(),j.getMaxDel());
+        Vertex<string> *add = pipes2.pipes.findVertex(j.getCode());
+        pipes2.pipes.addEdge(pipes2.pipes.findVertex("super_source")->getInfo(), add->getInfo(),j.getMaxDel());
     }
 
 
     for (auto k: citii.citiesTable) {
-        Vertex<string> *add = pipes.pipes.findVertex(k.getCode());
-        pipes.pipes.addEdge(add->getInfo(), pipes.pipes.findVertex("super_sink")->getInfo(),k.getDemand());
+        Vertex<string> *add = pipes2.pipes.findVertex(k.getCode());
+        pipes2.pipes.addEdge(add->getInfo(), pipes2.pipes.findVertex("super_sink")->getInfo(),k.getDemand());
     }
 
-    edmondsKarp(pipes.pipes.findVertex("super_source")->getInfo(), pipes.pipes.findVertex("super_sink")->getInfo(),pipes.pipes);
+    edmondsKarp(pipes2.pipes.findVertex("super_source")->getInfo(), pipes2.pipes.findVertex("super_sink")->getInfo(),pipes2.pipes);
 
 
     int totalFlow = 0;
     int pipe_count = 0;
-    for(auto vv : pipes.pipes.getVertexSet()) {
+    for(auto vv : pipes2.pipes.getVertexSet()) {
         for (auto pip: vv->getAdj()) {
             totalFlow += pip->getFlow();
             pipe_count++;
@@ -478,7 +477,7 @@ void Pipes:: balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr) {
     int averageFlow = totalFlow / pipe_count;
 
     // Redistribute flow from pipes with higher flow rates to pipes with lower flow rates
-    for(auto vv : pipes.pipes.getVertexSet()) {
+    for(auto vv : pipes2.pipes.getVertexSet()) {
         for (auto pip: vv->getAdj()) {
 
             if (pip->getFlow() > averageFlow) {
@@ -486,8 +485,8 @@ void Pipes:: balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr) {
 
 
 
-                for(auto vv2 : pipes.pipes.getVertexSet()) {
-                    for (auto pip2: vv->getAdj()) {
+                for(auto vv2 : pipes2.pipes.getVertexSet()) {
+                    for (auto pip2: vv2->getAdj()) {
                     if (pip2 != pip && pip2->getFlow() < averageFlow) {
                         double transferFlow = min(excessFlow, averageFlow - pip2->getFlow());
                         pip2->setFlow(pip2->getFlow()+ transferFlow);
@@ -503,7 +502,7 @@ void Pipes:: balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr) {
 }}
 
 
-    computeInitialMetrics( pipes, citii,  reserr) ;
+    computeInitialMetrics(pipes2) ;
 
 }
 
