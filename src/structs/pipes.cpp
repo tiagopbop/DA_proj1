@@ -346,13 +346,49 @@ void Pipes::OneCity(string source, string target, Graph<string> pipe,HashCities 
             }
 
             if(flow != flow_original && flow < b.getDemand()){
-                if(print){
-                    cout<<"The removal of the edge: "<<a.first<<" to "<<a.second<< " affects the following cities: "<< endl;
+                if (print) {
+
+                    cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
+                    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mRemoving\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33medge\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mfrom\033[0m" << "\033[0;32m⎯⎯\033[0m" << a.first << "\033[0;32m⎯⎯\033[0m" << "\033[1;33mto\033[0m" << "\033[0;32m⎯⎯\033[0m" << a.second;
+                    for (auto i = (11 - (a.first.length() + a.second.length())); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\033[0m" << endl;
+
+                    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mAffected\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mCities\033[0m" << "\033[0;32m⎯⎯⎯⎯⎯│⎯\033[0m" << "\033[1;33mCode\033[0m" << "\033[0;32m⎯⎯│⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mVariation\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mof\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mflow\033[0m" << "\033[0;32m⎯⎯│⎯\033[0m" << "\033[1;33mDeficit\033[0m" << "\033[0;32m⎯⎯│ \033[0m" << endl;
+
                     print = false;
                 }
 
-              cout << b.getName() << "  |  " << b.getCode() << "  |  " << "flow: "<<flow << "  |  with the following difference from the original flow: "
-                                                           << flow_original - flow << " and deficit of: "<< b.getDemand()-flow << endl;
+                int checker = 0;
+                for (int i = 0; i < b.getName().length(); i++) {
+                    if ((b.getName()[i] > 122 || b.getName()[i] < 65) && b.getName()[i] != 32) {
+                        checker++;
+                    }
+                }
+                checker /= 2;
+
+                cout << "\033[0;32m│⎯\033[0m" << b.getName();
+                for (auto i = ((20 - b.getName().length()) + checker); i > 0; i--) {
+                    cout << "\033[0;32m⎯\033[0m";
+                }
+                cout << "\033[0;32m│⎯\033[0m" << b.getCode();
+                for (auto i = (6 - b.getCode().length()); i > 0; i--) {
+                    cout << "\033[0;32m⎯\033[0m";
+                }
+                cout << "\033[0;32m│⎯\033[0m" << flow;
+                for (auto i = (14 - to_string(flow).length()); i > 0; i--) {
+                    cout << "\033[0;32m⎯\033[0m";
+                }
+                cout << "\033[0;32m│⎯\033[0m" << (flow_original - flow);
+                for (auto i = (26 - to_string(flow_original - flow).length()); i > 0; i--) {
+                    cout << "\033[0;32m⎯\033[0m";
+                }
+                cout << "\033[0;32m│⎯\033[0m" << (b.getDemand() - flow);
+                for (auto i = (16 - to_string(b.getDemand() - flow).length()); i > 0; i--) {
+                    cout << "\033[0;32m⎯\033[0m";
+                }
+                cout << "\033[0;32m│\033[0m" << endl;
             }
 
         }

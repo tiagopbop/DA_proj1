@@ -32,6 +32,7 @@ public:
     void OneCity(string source, string target, Graph<string> pipe,HashCities citii, HashReservoirs reserr, int chs_fl);
     bool check_existing_edge(string origin, string destiny, vector<pair<string,string>> rawr);
 
+    //void Max_flow_specific_city(string super_source, string super_sink, Graph<string> pipe, )
 
     string maxFlow(bool specific, string city);
     void edmondsKarp(string source, string target, Graph<string> pipe);
