@@ -182,9 +182,7 @@ public:
  *
  * @remarks This function assumes that each city in the hash table has a unique code.
  *
- * @complexity The time complexity of this function depends on the size of the hash table and its
- *             collision resolution strategy. Let 'n' be the number of cities in the hash table,
- *             and 'm' be the number of buckets in the hash table:
+ * @complexity
  *             - Creating a dummy Cities object: O(1)
  *             - Searching for the city in the hash table: O(1) on average (assuming constant-time
  *               access in the hash table), O(n) in the worst case (if all cities hash to the same

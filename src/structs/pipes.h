@@ -203,7 +203,8 @@ public:
  *       the number of edges in the graph.
  *     - Space: O(V + E) for maintaining the graph structure and additional space for storing string input.
  */
-    static void Max_flow_specific_city(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input);/**
+    static void Max_flow_specific_city(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input);
+    /**
  * @brief Calculates the maximum flow through a network of pipes, considering reservoirs as sources and cities as sinks.
  *
  * This function calculates the maximum flow through a network of pipes, where reservoirs are considered as sources and cities
@@ -274,7 +275,45 @@ public:
     *     - Space: O(V + E) for maintaining the graph structure and additional space for storing vectors and string input.
     */
     static void Removing_reservoir(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities cities, HashReservoirs reservoirs, string input, vector<string> not_full, int chs_fl, HashCities cities_copy, HashReservoirs reservoirs_copy, HashStations stations_copy, Pipes pipes_copy);
+    /**
+ * @brief Removes each pumping station from the network of pipes and displays updated information.
+ *
+ * This function iterates over each pumping station in the network of pipes, removes it, recalculates the flow,
+ * and displays the updated information about the flow and demand for each city in the network.
+ *
+ * @param stations_copy Hash table containing a copy of information about pumping stations.
+ * @param chs_fl Integer representing the choice of flow in the network.
+ * @param pipes_copy Copy of the Pipes object representing the network of pipes.
+ * @param cities_copy Hash table containing information about cities.
+ * @param reservoirs_copy Hash table containing information about reservoirs.
+ *
+ * @complexity
+ *     - Time: O(N * (V + E)) where N is the number of pumping stations, V is the number of vertices, and E is the number of edges in the graph.
+ *       This complexity arises from iterating over each pumping station, initializing edges, finding the maximum flow using the Edmonds-Karp algorithm,
+ *       and iterating over the cities to display updated information.
+ *     - Space: O(V + E) for maintaining the graph structure and additional space for storing intermediate vectors and string input.
+ */
+
     static void Removing_each_station(HashStations stations_copy, int chs_fl, Pipes pipes_copy, HashCities cities_copy, HashReservoirs reservoirs_copy);
+    /**
+ * @brief Removes a specific pumping station from the network of pipes and displays updated information.
+ *
+ * This function removes a specific pumping station from the network of pipes based on the input code,
+ * recalculates the flow, and displays the updated information about the flow and demand for each city in the network.
+ *
+ * @param input The code of the pumping station to be removed.
+ * @param chs_fl Integer representing the choice of flow in the network.
+ * @param stations_copy Hash table containing a copy of information about pumping stations.
+ * @param cities_copy Hash table containing information about cities.
+ * @param reservoirs_copy Hash table containing information about reservoirs.
+ * @param pipes_copy Copy of the Pipes object representing the network of pipes.
+ *
+ * @complexity
+ *     - Time: O((V + E) * N) where N is the number of pumping stations, V is the number of vertices, and E is the number of edges in the graph.
+ *       This complexity arises from iterating over each pumping station, initializing edges, finding the maximum flow using the Edmonds-Karp algorithm,
+ *       and iterating over the cities to display updated information.
+ *     - Space: O(V + E) for maintaining the graph structure and additional space for storing intermediate vectors and string input.
+ */
     static void Removing_specific_station(string input, int chs_fl, HashStations stations_copy, HashCities cities_copy, HashReservoirs reservoirs_copy, Pipes pipes_copy);
 
 
