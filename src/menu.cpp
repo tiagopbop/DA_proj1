@@ -167,7 +167,6 @@ int Menu::Terminal() {
                                     cout << "\033[1;32mThe city shown receives its minimum flow required\033[0m" << endl << endl << endl;
                                 }
 
-                                
                             } else if (input == "n" || input == "N") {
 
                                 cout << "\033[1;34mDo you wish to consider overflow? \033[0m" << "\033[1;33m [ Y | N ]\033[0m" << endl;
@@ -246,6 +245,10 @@ int Menu::Terminal() {
                                     }
                                     pipes.edmondsKarp(super_source->getInfo(),super_sink->getInfo(), pipes.pipes);
                                     double max_flow = 0;
+
+                                    cout << "\033[0;32m _____________________ _______ ______________ \033[0m" << endl;
+                                    cout << "\033[0;32m|_\033[0m" << "\033[1;33mCity\033[0m" << "\033[0;32m________________|_\033[0m" << "\033[1;33mCode\033[0m" << "\033[0;32m__|_\033[0m" << "\033[1;33mMaximum\033[0m" << "\033[0;32m_\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m_|\033[0m" << endl;
+
                                     for(auto a : hashCities.citiesTable){
                                         double res = 0;
                                         Vertex<string>* check_flow = pipes.pipes.findVertex(a.getCode());
@@ -253,7 +256,28 @@ int Menu::Terminal() {
                                             res = res + b->getFlow();
                                         }
                                         max_flow = max_flow + res;
-                                        cout << "\033[1;32mCity \033[0m" << a.getName() << "\033[1;32m of code \033[0m" << a.getCode() << "\033[1;32m has a maximum flow of \033[0m" << res << endl;
+
+                                        int checker = 0;
+                                        for (int i = 0; i < a.getName().length(); i++) {
+                                            if ((a.getName()[i] > 122 || a.getName()[i] < 65) && a.getName()[i] != 32) {
+                                                checker++;
+                                            }
+                                        }
+                                        checker /= 2;
+
+                                        cout << "\033[0;32m|_\033[0m" << a.getName();
+                                        for (auto i = ((20 - a.getName().length()) + checker); i > 0; i--) {
+                                            cout << "\033[0;32m_\033[0m";
+                                        }
+                                        cout << "\033[0;32m|_\033[0m" << a.getCode();
+                                        for (auto i = (6 - a.getCode().length()); i > 0; i--) {
+                                            cout << "\033[0;32m_\033[0m";
+                                        }
+                                        cout << "\033[0;32m|_\033[0m" << res;
+                                        for (auto i = (20 - to_string(res).length()); i > 0; i--) {
+                                            cout << "\033[0;32m_\033[0m";
+                                        }
+                                        cout << "\033[0;32m|\033[0m" << endl;
 
                                         max_flow_info m;
                                         m.city_name = a.getName();
@@ -273,7 +297,11 @@ int Menu::Terminal() {
                                     }
 
 
-                                    cout << endl << "\033[1;32mMaximum total flow is \033[0m" << max_flow << endl << endl;
+                                    cout << "\033[0;32m|_\033[0m" << "\033[1;33mMaximum\033[0m" << "\033[0;32m_\033[0m" << "\033[1;33mtotal\033[0m" << "\033[0;32m_\033[0m" << "\033[1;33mflow\033[0m" << "\033[0;32m__|_\033[0m" << max_flow;
+                                    for (auto i = (28 - to_string(max_flow).length()); i > 0; i--) {
+                                        cout << "\033[0;32m_\033[0m";
+                                    }
+                                    cout << "\033[0;32m|\033[0m" << endl << endl;
 
                                     cout << "\033[1;34mDo you wish to check for any cities where the flow isn't enough? \033[0m" << "\033[1;33m [ Y | N ]\033[0m" << endl;
                                     cin >> input;
