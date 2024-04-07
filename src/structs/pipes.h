@@ -39,6 +39,7 @@ public:
     static void Max_flow_non_specific_city_without_overflow(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input, vector<string> not_full, vector<max_flow_info> pipi);
 
     static void Removing_reservoir(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities cities, HashReservoirs reservoirs, string input, vector<string> not_full, int chs_fl, HashCities cities_copy, HashReservoirs reservoirs_copy, HashStations stations_copy, Pipes pipes_copy);
+    static void Removing_each_station(HashStations stations_copy, int chs_fl, Pipes pipes_copy, HashCities cities_copy, HashReservoirs reservoirs_copy);
 
 
 
