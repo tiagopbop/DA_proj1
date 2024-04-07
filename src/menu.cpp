@@ -47,7 +47,7 @@ int Menu::Terminal() {
     HashStations hashStations;
     hashStations.readLines(pipes,chs_fl);
 
-    pipes.ReadLines(hashReservoirs,hashCities,hashStations,chs_fl);
+    pipes.ReadLines(chs_fl);
 
     pipes.pipes.addVertex("super_source");
     pipes.pipes.addVertex("super_sink");
@@ -83,7 +83,8 @@ int Menu::Terminal() {
     cin >> decision;
     cout << endl << endl;
 
-
+    pipes.computeInitialMetrics(pipes,hashCities,hashReservoirs);
+    pipes.balanceLoad(pipes,hashCities,hashReservoirs);
 
     while (decision != 0) {
         switch (decision) {

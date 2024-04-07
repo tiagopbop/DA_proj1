@@ -24,7 +24,7 @@ public:
     Graph<string> pipes;
     Graph<string> pipes_copy;
 
-    void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, int decision);
+    void ReadLines(int decision);
     void ReadLines_copy_reservoirs(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, Reservoirs reservoirs, int decision);
     void ReadLines_copy_station(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, Stations stations, int decision);
     void ReadLines_copy_edgeless(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, int decision, pair<string,string> pp);
@@ -34,7 +34,11 @@ public:
 
     //void Max_flow_specific_city(string super_source, string super_sink, Graph<string> pipe, )
 
-    string maxFlow(bool specific, string city);
+    void balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr);
+    void computeInitialMetrics(Pipes pipes,HashCities citii, HashReservoirs reserr);
+
+
+        string maxFlow(bool specific, string city);
     void edmondsKarp(string source, string target, Graph<string> pipe);
     void augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f);
     double findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t);
@@ -48,6 +52,9 @@ struct max_flow_info{
     string city_code;
     int flow;
 };
+
+    void computeInitialMetrics(Pipes pipes,HashCities citii, HashReservoirs reserr);
+    void balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr);
 
 
 

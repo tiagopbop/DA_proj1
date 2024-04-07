@@ -6,7 +6,7 @@
 #include <vector>
 #include "pipes.h"
 using namespace std;
-void Pipes::ReadLines(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, int decision) {
+void Pipes::ReadLines(int decision) {
 
     string input;
 
@@ -406,4 +406,121 @@ void Pipes::OneCity(string source, string target, Graph<string> pipe,HashCities 
 
 
 }
+
+
+
+
+
+
+void Pipes:: computeInitialMetrics(Pipes pipes,HashCities citii, HashReservoirs reserr) {
+
+    // Compute average, variance, and maximum difference
+
+
+
+    double sumDifference = 0;
+    double maxDifference = 0;
+    double dif = 0;
+    int pipe_count =  0;
+    for(auto vv : pipes.pipes.getVertexSet()) {
+        for(auto pip: vv->getAdj() )
+        dif = pip->getWeight() - pip->getFlow();
+        sumDifference +=dif;
+        maxDifference = max(maxDifference, dif);
+        pipe_count++;
+    }
+    double averageDifference = sumDifference / pipe_count;
+
+    double sumSquaredDifference = 0;
+    dif = 0;
+    for(auto vv : pipes.pipes.getVertexSet()) {
+        for(auto pip: vv->getAdj() )
+         dif = pip->getWeight() - pip->getFlow();
+        sumSquaredDifference += (dif - averageDifference) * (dif - averageDifference);
+    }
+
+    double variance = sumSquaredDifference / pipes.pipes.getVertexSet().size();
+
+    std::cout << "Initial Metrics:" << std::endl;
+    std::cout << "Average Difference: " << averageDifference << std::endl;
+    std::cout << "Variance: " << variance << std::endl;
+    std::cout << "Maximum Difference: " << maxDifference << std::endl;
+}
+
+
+
+
+
+void Pipes:: balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr) {
+    for (auto j: reserr.reservoirsTable) {
+        Vertex<string> *add = pipes.pipes.findVertex(j.getCode());
+        pipes.pipes.addEdge(pipes.pipes.findVertex("super_source")->getInfo(), add->getInfo(),j.getMaxDel());
+    }
+
+
+    for (auto k: citii.citiesTable) {
+        Vertex<string> *add = pipes.pipes.findVertex(k.getCode());
+        pipes.pipes.addEdge(add->getInfo(), pipes.pipes.findVertex("super_sink")->getInfo(),k.getDemand());
+    }
+
+    edmondsKarp(pipes.pipes.findVertex("super_source")->getInfo(), pipes.pipes.findVertex("super_sink")->getInfo(),pipes.pipes);
+
+
+    int totalFlow = 0;
+    int pipe_count = 0;
+    for(auto vv : pipes.pipes.getVertexSet()) {
+        for (auto pip: vv->getAdj()) {
+            totalFlow += pip->getFlow();
+            pipe_count++;
+        }
+    }
+
+    int averageFlow = totalFlow / pipe_count;
+
+    // Redistribute flow from pipes with higher flow rates to pipes with lower flow rates
+    for(auto vv : pipes.pipes.getVertexSet()) {
+        for (auto pip: vv->getAdj()) {
+
+            if (pip->getFlow() > averageFlow) {
+                double excessFlow = pip->getFlow() - averageFlow;
+
+
+
+                for(auto vv2 : pipes.pipes.getVertexSet()) {
+                    for (auto pip2: vv->getAdj()) {
+                    if (pip2 != pip && pip2->getFlow() < averageFlow) {
+                        double transferFlow = min(excessFlow, averageFlow - pip2->getFlow());
+                        pip2->setFlow(pip2->getFlow()+ transferFlow);
+                        pip->setFlow(pip->getFlow()-transferFlow);
+                        excessFlow -= transferFlow;
+                    if (excessFlow == 0) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}}
+
+
+    computeInitialMetrics( pipes, citii,  reserr) ;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
