@@ -40,7 +40,7 @@ public:
 
     static void Removing_reservoir(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities cities, HashReservoirs reservoirs, string input, vector<string> not_full, int chs_fl, HashCities cities_copy, HashReservoirs reservoirs_copy, HashStations stations_copy, Pipes pipes_copy);
     static void Removing_each_station(HashStations stations_copy, int chs_fl, Pipes pipes_copy, HashCities cities_copy, HashReservoirs reservoirs_copy);
-
+    static void Removing_specific_station(string input, int chs_fl, HashStations stations_copy, HashCities cities_copy, HashReservoirs reservoirs_copy, Pipes pipes_copy);
 
 
     static void balanceLoad(Pipes& pipes,const HashCities& citii, const HashReservoirs& reserr);
