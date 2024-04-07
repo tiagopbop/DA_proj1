@@ -60,7 +60,7 @@ void Pipes:: testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vert
 
 
 // Function to find an augmenting path using Breadth-First Search
-bool Pipes:: findAugmentingPath( Vertex<string> *s, Vertex<string> *t, Graph<string> pipe) {
+bool Pipes:: findAugmentingPath( Vertex<string> *s, Vertex<string> *t, const Graph<string>& pipe) {
 // Mark all vertices as not visited
     for(auto v : pipe.getVertexSet()) {
         v->setVisited(false);
@@ -127,7 +127,7 @@ void Pipes::augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f)
 
 // Main function implementing the Edmonds-Karp algorithm
 
-void Pipes:: edmondsKarp(string source, string target, Graph<string> pipe) {
+void Pipes:: edmondsKarp(const string& source, const string& target, const Graph<string>& pipe) {
     Vertex<string>* s = pipe.findVertex(source);
     Vertex<string>* t = pipe.findVertex(target);
 // Initialize flow on all edges to 0
@@ -143,7 +143,7 @@ void Pipes:: edmondsKarp(string source, string target, Graph<string> pipe) {
     }
 }
 
-void Pipes::ReadLines_copy_reservoirs(Reservoirs reservoir, int decision) {
+void Pipes::ReadLines_copy_reservoirs(const Reservoirs& reservoir, int decision) {
     string input;
 
     if (decision == 1) {
@@ -177,7 +177,7 @@ void Pipes::ReadLines_copy_reservoirs(Reservoirs reservoir, int decision) {
     }
 }
 
-void Pipes::ReadLines_copy_station(Stations station, int decision) {
+void Pipes::ReadLines_copy_station(const Stations& station, int decision) {
     string input;
 
     if (decision == 1) {
@@ -213,7 +213,7 @@ void Pipes::ReadLines_copy_station(Stations station, int decision) {
 
 
 
-void Pipes::ReadLines_copy_edgeless(int decision, pair<string,string> pp) {
+void Pipes::ReadLines_copy_edgeless(int decision, const pair<string,string>& pp) {
     string input;
 
     if (decision == 1) {
@@ -249,8 +249,8 @@ void Pipes::ReadLines_copy_edgeless(int decision, pair<string,string> pp) {
 }
 
 
-bool Pipes::check_existing_edge(string origin, string destiny, vector<pair<string,string>> rawr){
-    for(auto a : rawr)
+bool Pipes::check_existing_edge(const string& origin, const string& destiny, const vector<pair<string,string>>& rawr){
+    for(const auto& a : rawr)
     {
         if(a.first == origin && a.second==destiny)
         {
@@ -268,20 +268,20 @@ bool Pipes::check_existing_edge(string origin, string destiny, vector<pair<strin
 
 
 //pepe is a maxflow struct
-void Pipes::OneCity(Graph<string> pipe,HashCities citii, HashReservoirs reserr, int chs_fl) {
+void Pipes::OneCity(Graph<string> pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl) {
     Pipes pipes_copy2;
     HashStations stations_copy;
     HashCities cities_copy;
     HashReservoirs reservoirs_copy;
     vector<pair<string,string>> pipes_vector;
 
-    for (auto j: reserr.reservoirsTable) {
+    for (const auto& j: reserr.reservoirsTable) {
         Vertex<string> *add = pipe.findVertex(j.getCode());
         pipe.addEdge(pipe.findVertex("super_source")->getInfo(), add->getInfo(),j.getMaxDel());
     }
 
 
-    for (auto k: citii.citiesTable) {
+    for (const auto& k: citii.citiesTable) {
         Vertex<string> *add = pipe.findVertex(k.getCode());
         pipe.addEdge(add->getInfo(), pipe.findVertex("super_sink")->getInfo(),k.getDemand());
     }
@@ -303,7 +303,7 @@ void Pipes::OneCity(Graph<string> pipe,HashCities citii, HashReservoirs reserr, 
 
 
 
-    for (auto a: pipes_vector) {
+    for (const auto& a: pipes_vector) {
         bool print = true;
         stations_copy.readLines(pipes_copy2, chs_fl);
         cities_copy.readLines(pipes_copy2, chs_fl);
@@ -315,22 +315,22 @@ void Pipes::OneCity(Graph<string> pipe,HashCities citii, HashReservoirs reserr, 
         Vertex<string> *super_sink_copy = pipes_copy2.pipes_copy.findVertex("super_sink");
 
 
-        for (auto j: reservoirs_copy.reservoirsTable) {
+        for (const auto& j: reservoirs_copy.reservoirsTable) {
             Vertex<string> *add = pipes_copy2.pipes_copy.findVertex(j.getCode());
             pipes_copy2.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(),j.getMaxDel());
         }
 
 
-        for (auto k: cities_copy.citiesTable) {
+        for (const auto& k: cities_copy.citiesTable) {
             Vertex<string> *add = pipes_copy2.pipes_copy.findVertex(k.getCode());
             pipes_copy2.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),k.getDemand());
         }
 
 
 
-        pipes_copy2.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy2.pipes_copy);
+        Pipes::edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy2.pipes_copy);
 
-        for (auto b: cities_copy.citiesTable) {
+        for (const auto& b: cities_copy.citiesTable) {
             Vertex<string> *check_incoming = pipes_copy2.pipes_copy.findVertex(b.getCode());
             double flow = 0;
             for (auto c: check_incoming->getIncoming()) {
@@ -411,7 +411,7 @@ void Pipes::OneCity(Graph<string> pipe,HashCities citii, HashReservoirs reserr, 
 
 
 
-void Pipes:: computeInitialMetrics(Pipes pipes2) {
+void Pipes:: computeInitialMetrics(const Pipes& pipes2, int whi) {
 
     // Compute average, variance, and maximum difference
 
@@ -440,86 +440,62 @@ void Pipes:: computeInitialMetrics(Pipes pipes2) {
 
     double variance = sumSquaredDifference / pipes2.pipes.getVertexSet().size();
 
-    std::cout << "Initial Metrics:" << std::endl;
-    std::cout << "Average Difference: " << averageDifference << std::endl;
-    std::cout << "Variance: " << variance << std::endl;
-    std::cout << "Maximum Difference: " << maxDifference << std::endl;
+    if(whi==0){
+    cout << "Initial Metrics:" << endl;}
+    else
+    {
+        cout << endl << endl << "Balanced Metrics"<< endl;
+    }
+    cout << "Average Difference: " << averageDifference << endl;
+    cout << "Variance: " << variance << endl;
+    cout << "Maximum Difference: " << maxDifference << endl;
 }
 
 
 
 
 
-void Pipes:: balanceLoad(Pipes pipes2,HashCities citii, HashReservoirs reserr) {
-    for (auto j: reserr.reservoirsTable) {
-        Vertex<string> *add = pipes2.pipes.findVertex(j.getCode());
-        pipes2.pipes.addEdge(pipes2.pipes.findVertex("super_source")->getInfo(), add->getInfo(),j.getMaxDel());
-    }
+void Pipes:: balanceLoad(Pipes& pipes2,const HashCities& citii, const HashReservoirs& reserr) {
 
 
-    for (auto k: citii.citiesTable) {
-        Vertex<string> *add = pipes2.pipes.findVertex(k.getCode());
-        pipes2.pipes.addEdge(add->getInfo(), pipes2.pipes.findVertex("super_sink")->getInfo(),k.getDemand());
-    }
 
-    edmondsKarp(pipes2.pipes.findVertex("super_source")->getInfo(), pipes2.pipes.findVertex("super_sink")->getInfo(),pipes2.pipes);
-
-
-    int totalFlow = 0;
-    int pipe_count = 0;
-    for(auto vv : pipes2.pipes.getVertexSet()) {
-        for (auto pip: vv->getAdj()) {
-            totalFlow += pip->getFlow();
-            pipe_count++;
+        double totalFlow = 0;
+        double pipe_count = 0;
+        for (auto vv: pipes2.pipes.getVertexSet()) {
+            for (auto pip: vv->getAdj()) {
+                totalFlow += pip->getFlow();
+                pipe_count++;
+            }
         }
-    }
 
-    int averageFlow = totalFlow / pipe_count;
+        double averageFlow = totalFlow / pipe_count;
 
-    // Redistribute flow from pipes with higher flow rates to pipes with lower flow rates
-    for(auto vv : pipes2.pipes.getVertexSet()) {
-        for (auto pip: vv->getAdj()) {
+        // Redistribute flow from pipes with higher flow rates to pipes with lower flow rates
+        for (auto vv: pipes2.pipes.getVertexSet()) {
+            for (auto pip: vv->getAdj()) {
 
-            if (pip->getFlow() > averageFlow) {
-                double excessFlow = pip->getFlow() - averageFlow;
-
+                if (pip->getFlow() > averageFlow) {
+                    double excessFlow = pip->getFlow() - averageFlow;
 
 
-                for(auto vv2 : pipes2.pipes.getVertexSet()) {
-                    for (auto pip2: vv2->getAdj()) {
-                    if (pip2 != pip && pip2->getFlow() < averageFlow) {
-                        double transferFlow = min(excessFlow, averageFlow - pip2->getFlow());
-                        pip2->setFlow(pip2->getFlow()+ transferFlow);
-                        pip->setFlow(pip->getFlow()-transferFlow);
-                        excessFlow -= transferFlow;
-                    if (excessFlow == 0) {
-                        break;
+                    for (auto vv2: pipes2.pipes.getVertexSet()) {
+                        for (auto pip2: vv2->getAdj()) {
+                            if (pip2 != pip && pip2->getFlow() < averageFlow) {
+                                double transferFlow = min(excessFlow, averageFlow - pip2->getFlow());
+                                pip2->setFlow(pip2->getFlow() + transferFlow);
+                                pip->setFlow(pip->getFlow() - transferFlow);
+                                excessFlow -= transferFlow;
+                                if (excessFlow == 0) {
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+
+
+        computeInitialMetrics(pipes2,1);
+
     }
-}}
-
-
-    computeInitialMetrics(pipes2) ;
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

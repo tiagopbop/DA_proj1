@@ -21,24 +21,24 @@ public:
     Graph<string> pipes_copy;
 
     void ReadLines(int decision);
-    void ReadLines_copy_reservoirs(Reservoirs reservoirs, int decision);
-    void ReadLines_copy_station(Stations stations, int decision);
-    void ReadLines_copy_edgeless(int decision, pair<string,string> pp);
+    void ReadLines_copy_reservoirs(const Reservoirs& reservoirs, int decision);
+    void ReadLines_copy_station(const Stations& stations, int decision);
+    void ReadLines_copy_edgeless(int decision, const pair<string,string>& pp);
 
-    void OneCity(Graph<string> pipe,HashCities citii, HashReservoirs reserr, int chs_fl);
-    bool check_existing_edge(string origin, string destiny, vector<pair<string,string>> rawr);
+    static void OneCity(Graph<string> pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl);
+    static bool check_existing_edge(const string& origin, const string& destiny, const vector<pair<string,string>>& rawr);
 
     //void Max_flow_specific_city(string super_source, string super_sink, Graph<string> pipe, )
 
-    void balanceLoad(Pipes pipes,HashCities citii, HashReservoirs reserr);
-    void computeInitialMetrics(Pipes pipes);
+    static void balanceLoad(Pipes& pipes,const HashCities& citii, const HashReservoirs& reserr);
+    static void computeInitialMetrics(const Pipes& pipes, int whi);
 
 
-    void edmondsKarp(string source, string target, Graph<string> pipe);
-    void augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f);
-    double findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t);
-    bool findAugmentingPath( Vertex<string> *s, Vertex<string> *t, Graph<string> pipe);
-    void testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vertex<string> *w, double residual);
+    static void edmondsKarp(const string& source, const string& target, const Graph<string>& pipe);
+    static void augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f);
+    static double findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t);
+    static bool findAugmentingPath( Vertex<string> *s, Vertex<string> *t, const Graph<string>& pipe);
+    static void testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vertex<string> *w, double residual);
 
     };
 

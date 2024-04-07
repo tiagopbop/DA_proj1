@@ -132,7 +132,7 @@ int Menu::Terminal() {
                                     Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                     pipes.pipes.addEdge(add->getInfo(), super_sink->getInfo(), a.getDemand());
                                 }
-                                pipes.edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
+                                Pipes::edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
                                 Cities save;
                                 for (const auto& a: hashCities.citiesTable) {
                                     if (a.getCode() == input) {
@@ -222,7 +222,7 @@ int Menu::Terminal() {
                                         Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(add->getInfo(), super_sink->getInfo(), INT_MAX);
                                     }
-                                    pipes.edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
+                                    Pipes::edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
                                     double max_flow = 0;
 
                                     cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
@@ -348,7 +348,7 @@ int Menu::Terminal() {
                                         Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
                                         pipes.pipes.addEdge(add->getInfo(), super_sink->getInfo(), a.getDemand());
                                     }
-                                    pipes.edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
+                                    Pipes::edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
                                     double max_flow = 0;
 
                                     cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
@@ -479,8 +479,25 @@ int Menu::Terminal() {
                             break;
                         case 2:
 
-                            pipes.computeInitialMetrics(pipes);
-                            pipes.balanceLoad(pipes,hashCities,hashReservoirs);
+                            for (const auto& a: hashReservoirs.reservoirsTable) {
+                                Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
+                                pipes.pipes.addEdge(super_source->getInfo(), add->getInfo(), a.getMaxDel());
+                            }
+
+                            for (const auto& a: hashCities.citiesTable) {
+                                Vertex<string> *add = pipes.pipes.findVertex(a.getCode());
+                                pipes.pipes.addEdge(add->getInfo(), super_sink->getInfo(), a.getDemand());
+                            }
+                            Pipes::edmondsKarp(super_source->getInfo(), super_sink->getInfo(), pipes.pipes);
+                            for (const auto& a: hashCities.citiesTable) {
+                                double res = 0;
+                                Vertex<string> *check_flow = pipes.pipes.findVertex(a.getCode());
+                                for (auto b: check_flow->getIncoming()) {
+                                    res = res + b->getFlow();
+                                }
+                            }
+                            Pipes::computeInitialMetrics(pipes, 0);
+                            Pipes::balanceLoad(pipes,hashCities,hashReservoirs);
 
                             break;
                         case 0: case 9:
@@ -556,7 +573,7 @@ int Menu::Terminal() {
                                                                       k.getDemand());
                                     }
 
-                                    pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),
+                                    Pipes::edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),
                                                            pipes_copy.pipes_copy);
 
                                     cout << "City - flow / Demand" << endl;
@@ -629,7 +646,7 @@ int Menu::Terminal() {
                                             pipes_copy.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),k.getDemand());
                                         }
 
-                                        pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy.pipes_copy);
+                                        Pipes::edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy.pipes_copy);
 
                                         cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
                                         cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mPumping\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mstation\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mremoved\033[0m" << "\033[0;32m⎯⎯⎯⎯⎯│⎯\033[0m" << a.getCode();
@@ -717,7 +734,7 @@ int Menu::Terminal() {
                                                                               k.getDemand());
                                             }
 
-                                            pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),
+                                            Pipes::edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),
                                                                    pipes_copy.pipes_copy);
 
                                             cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
@@ -786,7 +803,7 @@ int Menu::Terminal() {
                             }
                             break;
                         case 3:
-                            pipes.OneCity(pipes.pipes,hashCities, hashReservoirs,chs_fl);
+                            Pipes::OneCity(pipes.pipes,hashCities, hashReservoirs,chs_fl);
                             for(auto a: pipes.pipes.getVertexSet())
                             {
                                 for(auto b: a->getAdj())
