@@ -373,12 +373,64 @@ int Menu::Terminal() {
                     cout << endl << endl;
 
                     switch (decision) {
-                        case 1:
-
-                            cout << "\033[1;34mWhich water reservoir?\033[0m";
+                        case 1: {
+                            cout << "Which water reservoir?";
                             cin >> input;
-                            cout << endl << endl;
-                            cout << "para implementar" << endl;
+                            Pipes pipes_copy;
+                            HashStations stations_copy;
+                            HashCities cities_copy;
+                            HashReservoirs reservoirs_copy;
+                            stations_copy.readLines(pipes_copy, chs_fl);
+                            cities_copy.readLines(pipes_copy, chs_fl);
+                            reservoirs_copy.readLines(pipes_copy, chs_fl);
+                            for (auto a: reservoirs_copy.reservoirsTable) {
+                                if (a.getCode() == input) {
+                                    pipes_copy.ReadLines_copy_reservoirs(reservoirs_copy, cities_copy, stations_copy, a, chs_fl);
+                                    pipes_copy.pipes_copy.addVertex("super_source");
+                                    pipes_copy.pipes_copy.addVertex("super_sink");
+                                    Vertex<string> *super_source_copy = pipes_copy.pipes_copy.findVertex("super_source");
+                                    Vertex<string> *super_sink_copy = pipes_copy.pipes_copy.findVertex("super_sink");
+
+                                    for (auto j: reservoirs_copy.reservoirsTable) {
+                                        Vertex<string> *add = pipes_copy.pipes_copy.findVertex(j.getCode());
+                                        pipes_copy.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(),
+                                                                      j.getMaxDel());
+                                    }
+                                    for (auto k: cities_copy.citiesTable) {
+                                        Vertex<string> *add = pipes_copy.pipes_copy.findVertex(k.getCode());
+                                        pipes_copy.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(),
+                                                                      k.getDemand());
+                                    }
+
+                                    pipes_copy.edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(),pipes_copy.pipes_copy);
+
+                                    cout << "City - flow / Demand" << endl;
+                                    double res = 0;
+                                    for (auto b: cities_copy.citiesTable) {
+                                        Vertex<string> *check_incoming = pipes_copy.pipes_copy.findVertex(b.getCode());
+                                        double flow = 0;
+                                        for (auto c: check_incoming->getIncoming()) {
+                                            flow = flow + c->getFlow();
+                                        }
+                                        res = res + flow;
+                                        cout << b.getCode() << "  - " << flow << " / " << b.getDemand();
+                                        if (flow < b.getDemand()) {
+                                            double deficit = b.getDemand() - flow;
+                                            cout << "   (deficit of " << deficit << ")";
+                                        }
+                                        cout << endl;
+                                    }
+                                    cout<<"Total flow : "<<res<<endl;
+                                    cout << endl;
+                                    for (auto v: pipes_copy.pipes_copy.getVertexSet()) {
+                                        for (auto e: v->getAdj()) {
+                                            pipes_copy.pipes_copy.removeEdge(v->getInfo(), e->getDest()->getInfo());
+                                        }
+                                        pipes_copy.pipes_copy.removeVertex(v->getInfo());
+                                    }
+                                }
+                            }
+                        }
 
                             break;
                         case 2: {
@@ -403,7 +455,7 @@ int Menu::Terminal() {
                                         stations_copy.readLines(pipes_copy, chs_fl);
                                         cities_copy.readLines(pipes_copy, chs_fl);
                                         reservoirs_copy.readLines(pipes_copy, chs_fl);
-                                        pipes_copy.ReadLines_copy(reservoirs_copy, cities_copy, stations_copy, a, chs_fl);
+                                        pipes_copy.ReadLines_copy_station(reservoirs_copy, cities_copy, stations_copy, a, chs_fl);
                                         pipes_copy.pipes_copy.addVertex("super_source");
                                         pipes_copy.pipes_copy.addVertex("super_sink");
                                         Vertex<string> *super_source_copy = pipes_copy.pipes_copy.findVertex("super_source");
@@ -459,7 +511,7 @@ int Menu::Terminal() {
                                     reservoirs_copy.readLines(pipes_copy, chs_fl);
                                     for (auto a: stations_copy.stationsTable) {
                                         if (a.getCode() == code) {
-                                            pipes_copy.ReadLines_copy(reservoirs_copy, cities_copy, stations_copy, a, chs_fl);
+                                            pipes_copy.ReadLines_copy_station(reservoirs_copy, cities_copy, stations_copy, a, chs_fl);
                                             pipes_copy.pipes_copy.addVertex("super_source");
                                             pipes_copy.pipes_copy.addVertex("super_sink");
                                             Vertex<string> *super_source_copy = pipes_copy.pipes_copy.findVertex(

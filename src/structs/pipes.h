@@ -18,20 +18,22 @@ class HashStations;
 class HashCities;
 class HashReservoirs;
 class Stations;
+class Reservoirs;
 class Pipes{
 public:
     Graph<string> pipes;
     Graph<string> pipes_copy;
 
     void ReadLines(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, int decision);
-    void ReadLines_copy(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, Stations stations, int decision);
+    void ReadLines_copy_reservoirs(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, Reservoirs reservoirs, int decision);
+    void ReadLines_copy_station(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, Stations stations, int decision);
     void ReadLines_copy_edgeless(HashReservoirs hashReservoirs, HashCities hashcities, HashStations hashStations, int decision, pair<string,string> pp);
 
     void OneCity(string source, string target, Graph<string> pipe,HashCities citii, HashReservoirs reserr, int chs_fl);
     bool check_existing_edge(string origin, string destiny, vector<pair<string,string>> rawr);
 
 
-        string maxFlow(bool specific, string city);
+    string maxFlow(bool specific, string city);
     void edmondsKarp(string source, string target, Graph<string> pipe);
     void augmentFlowAlongPath(Vertex<string> *s, Vertex<string> *t, double f);
     double findMinResidualAlongPath(Vertex<string> *s, Vertex<string> *t);

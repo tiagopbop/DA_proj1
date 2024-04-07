@@ -144,7 +144,41 @@ void Pipes:: edmondsKarp(string source, string target, Graph<string> pipe) {
     }
 }
 
-void Pipes::ReadLines_copy(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Stations station, int decision) {
+void Pipes::ReadLines_copy_reservoirs(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Reservoirs reservoir, int decision) {
+    string input;
+
+    if (decision == 1) {
+        input = "../data/Pipes.csv";
+    } else {
+        input = "../data/Pipes_Madeira.csv";
+    }
+
+    ifstream MyReadFile(input);
+
+    string line;
+    string sa;
+    string sb;
+    string cap;
+    string dir;
+    getline(MyReadFile, line);
+    while (std::getline(MyReadFile, line)) {
+        stringstream ss(line);
+        getline(ss, sa, ',');
+        getline(ss, sb, ',');
+        getline(ss, cap, ',');
+        getline(ss, dir, '\r');
+        if (!(sa == reservoir.getCode() || sb == reservoir.getCode())) {
+            if (dir == "1") {
+                pipes_copy.addEdge(sa, sb, stod(cap));
+            } else {
+                pipes_copy.addBidirectionalEdge(sa, sb, stod(cap));
+            }
+
+        }
+    }
+}
+
+void Pipes::ReadLines_copy_station(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, Stations station, int decision) {
     string input;
 
     if (decision == 1) {
@@ -177,6 +211,7 @@ void Pipes::ReadLines_copy(HashReservoirs hashReservoirs,HashCities hashCities, 
         }
     }
 }
+
 
 
 void Pipes::ReadLines_copy_edgeless(HashReservoirs hashReservoirs,HashCities hashCities, HashStations hashStations, int decision, pair<string,string> pp) {
