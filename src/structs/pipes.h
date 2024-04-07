@@ -17,6 +17,11 @@ class Stations;
 class Reservoirs;
 class Pipes{
 public:
+    struct max_flow_info{
+        string city_name;
+        string city_code;
+    };
+
     Graph<string> pipes;
     Graph<string> pipes_copy;
 
@@ -29,7 +34,13 @@ public:
     static void OneCity(Graph<string>pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl, string cit);
     static bool check_existing_edge(const string& origin, const string& destiny, const vector<pair<string,string>>& rawr);
 
-    //void Max_flow_specific_city(string super_source, string super_sink, Graph<string> pipe, )
+    static void Max_flow_specific_city(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input);
+    static void Max_flow_non_specific_city_with_overflow(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input, vector<string> not_full, vector<max_flow_info> pipi);
+    static void Max_flow_non_specific_city_without_overflow(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities hashCities, HashReservoirs hashReservoirs, string input, vector<string> not_full, vector<max_flow_info> pipi);
+
+    static void Removing_reservoir(Vertex<string> * super_source, Vertex<string> * super_sink, Graph<string> pipes, HashCities cities, HashReservoirs reservoirs, string input, vector<string> not_full, int chs_fl, HashCities cities_copy, HashReservoirs reservoirs_copy, HashStations stations_copy, Pipes pipes_copy);
+
+
 
     static void balanceLoad(Pipes& pipes,const HashCities& citii, const HashReservoirs& reserr);
     static void computeInitialMetrics(const Pipes& pipes, int whi);
@@ -42,11 +53,6 @@ public:
     static void testAndVisit(std::queue< Vertex<string>*> &q, Edge<string> *e, Vertex<string> *w, double residual);
 
     };
-
-struct max_flow_info{
-    string city_name;
-    string city_code;
-};
 
 
 
