@@ -25,7 +25,8 @@ public:
     void ReadLines_copy_station(const Stations& stations, int decision);
     void ReadLines_copy_edgeless(int decision, const pair<string,string>& pp);
 
-    static void OneCity(Graph<string> pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl);
+    static void AllPipes(Graph<string> pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl);
+    static void OneCity(Graph<string>pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl, string cit);
     static bool check_existing_edge(const string& origin, const string& destiny, const vector<pair<string,string>>& rawr);
 
     //void Max_flow_specific_city(string super_source, string super_sink, Graph<string> pipe, )

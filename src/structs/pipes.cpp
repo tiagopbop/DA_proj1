@@ -268,7 +268,7 @@ bool Pipes::check_existing_edge(const string& origin, const string& destiny, con
 
 
 //pepe is a maxflow struct
-void Pipes::OneCity(Graph<string> pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl) {
+void Pipes::AllPipes(Graph<string> pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl) {
     Pipes pipes_copy2;
     HashStations stations_copy;
     HashCities cities_copy;
@@ -408,19 +408,112 @@ void Pipes::OneCity(Graph<string> pipe,const HashCities& citii, const HashReserv
 
 
 
+void Pipes:: OneCity(Graph<string>pipe,const HashCities& citii, const HashReservoirs& reserr, int chs_fl, string cit) {
+    Pipes pipes_copy2;
+    HashStations stations_copy;
+    HashCities cities_copy;
+    HashReservoirs reservoirs_copy;
+    vector<pair<string, string>> pipes_vector;
+    bool print = true;
 
+    for (const auto &j: reserr.reservoirsTable) {
+        Vertex<string> *add = pipe.findVertex(j.getCode());
+        pipe.addEdge(pipe.findVertex("super_source")->getInfo(), add->getInfo(), j.getMaxDel());
+    }
+
+
+    for (const auto &k: citii.citiesTable) {
+        Vertex<string> *add = pipe.findVertex(k.getCode());
+        pipe.addEdge(add->getInfo(), pipe.findVertex("super_sink")->getInfo(), k.getDemand());
+    }
+
+
+    edmondsKarp(pipe.findVertex("super_source")->getInfo(), pipe.findVertex("super_sink")->getInfo(), pipe);
+
+    //this cycle checks if an edge is already in the vector -> only adds if it is not
+    for (auto a: pipe.getVertexSet()) {
+        for (auto b: a->getAdj()) {
+            if (check_existing_edge(b->getOrig()->getInfo(), b->getDest()->getInfo(), pipes_vector)) {
+                pair<string, string> op = make_pair(b->getOrig()->getInfo(), b->getDest()->getInfo());
+                pipes_vector.push_back(op);
+            }
+        }
+    }
+
+
+    for (const auto &a: pipes_vector) {
+        stations_copy.readLines(pipes_copy2, chs_fl);
+        cities_copy.readLines(pipes_copy2, chs_fl);
+        reservoirs_copy.readLines(pipes_copy2, chs_fl);
+        pipes_copy2.ReadLines_copy_edgeless(chs_fl, a);
+        pipes_copy2.pipes_copy.addVertex("super_source");
+        pipes_copy2.pipes_copy.addVertex("super_sink");
+        Vertex<string> *super_source_copy = pipes_copy2.pipes_copy.findVertex("super_source");
+        Vertex<string> *super_sink_copy = pipes_copy2.pipes_copy.findVertex("super_sink");
+
+
+        for (const auto &j: reservoirs_copy.reservoirsTable) {
+            Vertex<string> *add = pipes_copy2.pipes_copy.findVertex(j.getCode());
+            pipes_copy2.pipes_copy.addEdge(super_source_copy->getInfo(), add->getInfo(), j.getMaxDel());
+        }
+
+
+        for (const auto &k: cities_copy.citiesTable) {
+            Vertex<string> *add = pipes_copy2.pipes_copy.findVertex(k.getCode());
+            pipes_copy2.pipes_copy.addEdge(add->getInfo(), super_sink_copy->getInfo(), k.getDemand());
+        }
+
+
+        Pipes::edmondsKarp(super_source_copy->getInfo(), super_sink_copy->getInfo(), pipes_copy2.pipes_copy);
+
+        for (const auto &b: cities_copy.citiesTable) {
+            if(!(b.getCode()==citii.findCity(cit)->getCode())) continue;
+            Vertex<string> *check_incoming = pipes_copy2.pipes_copy.findVertex(b.getCode());
+            double flow = 0;
+            for (auto c: check_incoming->getIncoming()) {
+                flow = flow + c->getFlow();
+            }
+
+
+            Vertex<string> *check_incoming_original = pipe.findVertex(b.getCode());
+            double flow_original = 0;
+            for (auto c: check_incoming_original->getIncoming()) {
+                flow_original = flow_original + c->getFlow();
+            }
+
+            if ( flow != flow_original && flow < b.getDemand()) {
+                if (print) {
+                    cout << "The city " << b.getCode() << " is affected by the following pipes: " << endl << a.first
+                         << "-" << a.second << "  with a deficit of " << b.getDemand() - flow << "and diff of"
+                         << flow_original - flow << endl;
+                    print = false;
+                } else {
+                    cout << a.first << "-" << a.second << "  with a deficit of " << b.getDemand() - flow << "and diff of"
+                         << flow_original - flow << endl;
+
+                }
+            }
+        }
+
+
+        for (auto v: pipes_copy2.pipes_copy.getVertexSet()) {
+            for (auto e: v->getAdj()) {
+                pipes_copy2.pipes_copy.removeEdge(v->getInfo(), e->getDest()->getInfo());
+            }
+            pipes_copy2.pipes_copy.removeVertex(v->getInfo());
+        }
+    }
+    cout << endl << endl;
+}
 
 
 void Pipes:: computeInitialMetrics(const Pipes& pipes2, int whi) {
-
-    // Compute average, variance, and maximum difference
-
-
 
     double sumDifference = 0;
     double maxDifference = 0;
     double dif = 0;
     int pipe_count =  0;
+
     for(auto vv : pipes2.pipes.getVertexSet()) {
         for(auto pip: vv->getAdj() )
         dif = pip->getWeight() - pip->getFlow();
@@ -432,16 +525,18 @@ void Pipes:: computeInitialMetrics(const Pipes& pipes2, int whi) {
 
     double sumSquaredDifference = 0;
     dif = 0;
+
     for(auto vv : pipes2.pipes.getVertexSet()) {
         for(auto pip: vv->getAdj() )
          dif = pip->getWeight() - pip->getFlow();
-        sumSquaredDifference += (dif - averageDifference) * (dif - averageDifference);
+         sumSquaredDifference += (dif - averageDifference) * (dif - averageDifference);
     }
 
     double variance = sumSquaredDifference / pipes2.pipes.getVertexSet().size();
 
     if(whi==0){
-    cout << "Initial Metrics:" << endl;}
+    cout << "Unbalanced Metrics:" << endl;
+    }
     else
     {
         cout << endl << endl << "Balanced Metrics"<< endl;

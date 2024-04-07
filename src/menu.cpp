@@ -803,7 +803,9 @@ int Menu::Terminal() {
                             }
                             break;
                         case 3:
-                            Pipes::OneCity(pipes.pipes,hashCities, hashReservoirs,chs_fl);
+                            Pipes::OneCity(pipes.pipes, hashCities,hashReservoirs,  chs_fl,"C_11");
+
+                            //Pipes::AllPipes(pipes.pipes,hashCities, hashReservoirs,chs_fl);
                             for(auto a: pipes.pipes.getVertexSet())
                             {
                                 for(auto b: a->getAdj())
