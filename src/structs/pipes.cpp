@@ -310,7 +310,7 @@ void Pipes::OneCity(string source, string target, Graph<string> pipe,HashCities 
                 flow_original = flow_original + c->getFlow();
             }
 
-            if(flow != flow_original && flow < b.getDemand() && flow_original == b.getDemand()){
+            if(flow != flow_original && flow < b.getDemand()){
                 if(print){
                     cout<<"The removal of the edge: "<<a.first<<" to "<<a.second<< " affects the following cities: "<< endl;
                     print = false;
