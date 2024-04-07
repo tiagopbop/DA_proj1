@@ -683,6 +683,18 @@ void Pipes:: OneCity(Graph<string>pipe,const HashCities& citii, const HashReserv
 
             if ( flow != flow_original && flow < b.getDemand()) {
                 if (print) {
+
+                    cout << "\033[0;32m ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ \033[0m" << endl;
+                    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mCity\033[0m" << "\033[0;32m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯│⎯\033[0m" << b.getCode();
+                    for (auto i = (25 - b.getCode().length()); i > 0; i--) {
+                        cout << "\033[0;32m⎯\033[0m";
+                    }
+                    cout << "\033[0;32m│\033[0m" << endl;
+
+                    cout << "\033[0;32m│⎯\033[0m" << "\033[1;33mOrigin\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDestination\033[0m" << "\033[0;32m⎯⎯⎯│⎯\033[0m" << "\033[1;33mDeficit\033[0m" << "\033[0;32m⎯⎯⎯⎯│⎯\033[0m" << "\033[1;33mFlow\033[0m" << "\033[0;32m⎯\033[0m" << "\033[1;33mvariation\033[0m" << "\033[0;32m⎯⎯⎯│\033[0m" << endl;
+                    cout << "\033[0;32m│⎯\033[0m";
+
+
                     cout << "The city " << b.getCode() << " is affected by the following pipes: " << endl << a.first
                          << "-" << a.second << "  with a deficit of " << b.getDemand() - flow << "and diff of"
                          << flow_original - flow << endl;

@@ -205,7 +205,7 @@ int Menu::Terminal() {
                          << " Check the affected cities for each pipe that is taken out of commission"
                          << endl;
                     cout << "\033[1;36m[ 4 ]\033[0m"
-                         << " Check the pipes that affect each city if taken out of commission"
+                         << " Check the pipes that affect a specific city if taken out of commission"
                          << endl;
                     cout << "\033[1;33m[ 9 ] Go back\033[0m" << endl;
                     cout << "\033[1;31m[ 0 ] Quit\033[0m" << endl;
@@ -433,9 +433,9 @@ int Menu::Terminal() {
                             }
                             break;
                         case 3:
-                            Pipes::OneCity(pipes.pipes, hashCities,hashReservoirs,  chs_fl,"C_11");
 
-                            //Pipes::AllPipes(pipes.pipes,hashCities, hashReservoirs,chs_fl);
+                            Pipes::AllPipes(pipes.pipes,hashCities, hashReservoirs,chs_fl);
+
                             for(auto a: pipes.pipes.getVertexSet())
                             {
                                 for(auto b: a->getAdj())
@@ -446,7 +446,19 @@ int Menu::Terminal() {
                             break;
                         case 4:
 
+                            cout << "\033[1;34mWhich city? \033[0m";
+                            cin >> input;
+                            cout << endl << endl;
 
+                            Pipes::OneCity(pipes.pipes, hashCities,hashReservoirs,  chs_fl,input);
+
+                            for(auto a: pipes.pipes.getVertexSet())
+                            {
+                                for(auto b: a->getAdj())
+                                {
+                                    b->setFlow(0);
+                                }
+                            }
 
                             break;
                         case 0: case 9:
