@@ -42,6 +42,7 @@ public:
     bool removeEdge(T in);
     void removeOutgoingEdges();
 
+
 protected:
     T info;                // info node
     std::vector<Edge<T> *> adj;  // outgoing edges
